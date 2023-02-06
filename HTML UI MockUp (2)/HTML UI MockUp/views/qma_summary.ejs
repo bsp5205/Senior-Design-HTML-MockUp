@@ -1,0 +1,81 @@
+<%- include('qma_header.ejs') %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+    <script data-require="d3@3.5.17" data-semver="3.5.17" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.css" />
+    <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
+</head>
+<script>
+    function myFunction(){
+        const score_list= document.querySelectorAll('td[class=score]')
+        for (let i = 0; i < score_list.length; i++) {
+            console.log(score_list[i].innerHTML)
+            score_list[i].style.setProperty('background-color', `hsl(${score_list[i].innerHTML}, 100%, 50%)`)
+        }
+    }
+</script>
+<body onload="myFunction()">
+<div id="outer-grid-summary"  style="min-height: 90%">
+    <div id="inner-grid-summary">
+        <div class="summary-table">
+            <table>
+                <tr>
+                    <th colspan="4">QMA Metric Analysis Report</th>
+                </tr>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Cyclo Complexity</th>
+                    <th>Coupling</th>
+                    <th>Cohesion</th>
+                    <th>LOC</th>
+                </tr>
+                <tr>
+                    <td>000123</td>
+                    <td class="score">10</td>
+                    <td class="score">55</td>
+                    <td class="score">30</td>
+                    <td class="score">45</td>
+                </tr>
+
+                <tr>
+                    <td>000456</td>
+                    <td class="score">10</td>
+                    <td class="score">20</td>
+                    <td class="score">35</td>
+                    <td class="score">40</td>
+                </tr>
+
+                <tr>
+                    <td>000789</td>
+                    <td class="score">100</td>
+                    <td class="score">30</td>
+                    <td class="score">70</td>
+                    <td class="score">40</td>
+                </tr>
+
+                <tr>
+                    <td>101112</td>
+                    <td class="score">65</td>
+                    <td class="score">20</td>
+                    <td class="score">15</td>
+                    <td class="score">75</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <div id="inner-grid-summary">
+        <div>
+            <table>
+                <tr>
+                    <th colspan="2">QMA Summary Observations</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

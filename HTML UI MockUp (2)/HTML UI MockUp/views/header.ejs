@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+    <script data-require="d3@3.5.17" data-semver="3.5.17" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.css" />
+    <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
+</head>
+<script>
+    function menu() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function change_secret(val, class_list){
+        let secret_list = document.getElementsByClassName("secret");
+        console.log(class_list[0])
+        let slider_list = document.getElementsByClassName('slider-value')
+
+        for(let i=0; i < slider_list.length; i++){
+            if(slider_list[i].classList.contains(class_list[0])){
+                secret_list[i].value = val;
+                console.log(secret_list[i].value)
+            }
+        }
+
+    }
+</script>
+<div id="gradebook_header" class="subheadContent" style="">
+    <div class="subheadContent subheadContent--flex-start">
+        <div class="assignmentDetails">
+            <a id="assignment_url" href="/courses/2173881/assignments/13793262" class="a-style">
+                <h2 class="assignmentDetails__Title">Assignment Name</h2>
+            </a>
+            <p class="assignmentDetails__Info">
+                <span>Due: Month Day, Year at Time</span>
+                - <a id="context_title" href="/courses/2173881" class="a-style">Course Name, Section #: Title </a>
+            </p>
+        </div>
+    </div>
+    <div class="subheadContent subheadContent--flex-end">
+        <div class="statsMetric">
+            <div class="statsMetric__Item">
+                <div class="statsMetric__Item-value" id="x_of_x_graded">32/33</div>
+                <div class="statsMetric__Item-label">Graded</div>
+            </div>
+            <div class="statsMetric__Item">
+                <div class="statsMetric__Item-value" id="x_of_x_students_frd">1/33</div>
+                <div class="statsMetric__Item-label" id="gradee"></div>
+            </div>
+        </div>
+        <div class="studentSelection">
+            <button id="prev-student-button" class="Button Button--icon-action gradebookMoveToNext prev" type="button" aria-label="Previous">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                </svg>
+            </button>
+
+            <form action="http://localhost:3000/change_student" method="post">
+                <select name="student_list" id="student-list" class="student-selection-class" onchange="this.form.submit()">
+                    <% for (let i = 0; i < student_list.length; i++) { %>
+                        <% if(selected_student == student_list[i]){%>
+                            <option value="<%= student_list[i].studentID %>" class="other-student" selected><%= student_list[i].name %></option>
+                        <%}else{%>
+                                <option value="<%= student_list[i].studentID %>" class="other-student"><%= student_list[i].name %></option>
+                        <%}%>
+                    <% } %>
+                </select>
+                <% for (let i = 0; i < selected_student.submissions[0].QMA_names.length; i++) { %>
+                    <label>
+                        <input class="secret" name='test' value="50">
+                    </label>
+                <% } %>
+                <% for (let i = 0; i < selected_student.submissions[0].CMA_names.length; i++) { %>
+                <label>
+                    <input class="secret" name='test' value="50">
+                </label>
+                <% } %>
+
+            </form>
+            <button id="next-student-button" class="Button Button--icon-action gradebookMoveToNext next" type="button" aria-label="Next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+</html>

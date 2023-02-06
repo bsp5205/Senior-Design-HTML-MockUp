@@ -1,0 +1,354 @@
+<%- include('header.ejs') %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+    <script data-require="d3@3.5.17" data-semver="3.5.17" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.css" />
+    <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
+  </head>
+  <script>
+    var base_scores = []
+    function updateTextInput(parent) {
+      var val = -1;
+      for (const node of parent.childNodes) {
+        if(node.id === "rangeInput"){
+          val = node.value;
+          let sv = node.value;
+          change_secret(sv, node.classList)
+          let slider_class_list = node.classList.value;
+          let qma_color_list = document.getElementsByClassName("color-QMA");
+          for(let i = 0; i < qma_color_list.length; i++){
+            if(qma_color_list[i].classList.contains(slider_class_list)){
+              let base = base_scores[i]
+              let value = 0;
+              if(sv < 50){
+                value = base - (sv - 50)
+              }else if (sv > 50){
+                value = base + ((-1 * sv) + 50)
+              }else{
+                value = base
+              }
+              qma_color_list[i].setAttribute('value', value);
+              myFunction()
+
+              break;
+            }
+          }
+
+        }else if(node.id === "textInput"){
+          node.value = val;
+        }
+      }
+    }
+    function updateSlider(parent) {
+      var val = -1;
+      for (const node of parent.childNodes) {
+        if(node.id === "textInput"){
+          val = node.value;
+          if (val > 100){
+            node.value = 100;
+          }
+          //change_secret(node.value, node.classList)
+        }
+      }
+      for (const node of parent.childNodes) {
+        if(node.id === "rangeInput"){
+          node.value = val;
+          let sv = node.value;
+          change_secret(sv, node.classList)
+          let slider_class_list = node.classList.value;
+          let qma_color_list = document.getElementsByClassName("color-QMA");
+          for(let i = 0; i < qma_color_list.length; i++){
+            if(qma_color_list[i].classList.contains(slider_class_list)){
+              //console.log(base_scores[i])
+              let base = base_scores[i]
+              let value = 0;
+              if(sv < 50){
+                value = base - (sv - 50)
+              }else if (sv > 50){
+                value = base + ((-1 * sv) + 50)
+              }else{
+                value = base
+              }
+              qma_color_list[i].setAttribute('value', value);
+              myFunction()
+              break;
+            }
+          }
+        }
+      }
+    }
+    function myFunction(){
+      var test = '<%- JSON.stringify(selected_student.submissions[0].QMA_scores) %>';
+      test = JSON.parse(test)
+      for (let i = 0; i < test.length; i++){
+        base_scores.push(test[i])
+      }
+      test = '<%- JSON.stringify(selected_student.submissions[0].CMA_scores) %>';
+      test = JSON.parse(test)
+      for (let i = 0; i < test.length; i++){
+        base_scores.push(test[i])
+      }
+
+      const Slider2= document.querySelectorAll('input[name=rangeInput2]')
+      for (let i = 0; i < Slider2.length; i++) {
+        Slider2[i].style.setProperty('--SliderColor', `hsl(${Slider2[i].value}, 100%, 50%)`)
+        Slider2[i].oninput =_=> Slider2[i].style.setProperty('--SliderColor', `hsl(${Slider2[i].value}, 100%, 50%)`)
+      }
+    }
+
+  </script>
+
+  <!--"https://codepen.io/brandonmcconnell/pen/oJBVQW" -->
+  <body onload="myFunction()">
+
+    <div id="outer-grid">
+      <div id="inner-grid">
+        <div>
+          <p><pre><%=selected_student.submissions[0].file_code%></pre></p>
+        </div>
+      </div>
+      <div id="inner-grid">
+        <div>
+          <table>
+            <tr>
+              <th colspan="2">Quality Metric Analysis (QMA)</th>
+            </tr>
+            <% for (let i = 0; i < selected_student.submissions[0].QMA_names.length; i++) { %>
+              <tr>
+                <td>
+                  <div class="slider" align="center">
+                    <p><%= selected_student.submissions[0].QMA_names[i] %></p>
+                    <input id="itr" type="range" min="0" max="100" value=<%= selected_student.submissions[0].QMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1)%>">
+                  </div>
+                </td>
+              </tr>
+            <% } %>
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="0" class="slider2 test color-QMA s1" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="25" class="slider2 test color-QMA s2" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="66" class="slider2 test color-QMA s3" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="100" class="slider2 test color-QMA s4" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <th colspan="2">Convention Metric Analysis (CMA)</th>
+            </tr>
+            <% for (let i = 0; i < selected_student.submissions[0].CMA_names.length; i++) { %>
+              <tr>
+                <td>
+                  <div class="slider" align="center">
+                    <p><%= selected_student.submissions[0].CMA_names[i] %></p>
+                    <input id="itr" type="range" min="0" max="100" value=<%= selected_student.submissions[0].CMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1+selected_student.submissions[0].QMA_names.length)%>">
+                  </div>
+                </td>
+              </tr>
+            <% } %>
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="20" class="slider2 test color-QMA s5" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="100" class="slider2 test color-QMA s6" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider" align="center">-->
+<!--                  <p>Name</p>-->
+<!--                  <input id="itr" type="range" min="0" max="100" value="15" class="slider2 test color-QMA s7" name="rangeInput2">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+          </table>
+        </div>
+      </div>
+      <div id="inner-grid">
+        <div>
+          <table>
+            <tr>
+              <th colspan="2">QMA Threshold</th>
+            </tr>
+            <% for (let i = 0; i < selected_student.submissions[0].QMA_names.length; i++) { %>
+              <tr>
+                <td>
+                  <div class="slider" align="center">
+                    <p><%= selected_student.submissions[0].QMA_names[i] %></p>
+                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
+                    <input type="text" id ="textInput" value="50" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
+                    </div>
+                </td>
+              </tr>
+            <% } %>
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s1" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s2" min="0" max="100" step="10" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s3" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s4" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <th colspan="2">CMA Threshold</th>
+            </tr>
+            <% for (let i = 0; i < selected_student.submissions[0].CMA_names.length; i++) { %>
+              <tr>
+                <td>
+                  <div class="slider" align="center">
+                    <p><%= selected_student.submissions[0].CMA_names[i] %></p>
+                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1+selected_student.submissions[0].QMA_names.length)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
+                    <input type="text" id ="textInput" value="50" class="slider-value <%='s'+(i+1+selected_student.submissions[0].QMA_names.length)%>" onchange="updateSlider(this.parentNode);">
+                  </div>
+                </td>
+              </tr>
+            <% } %>
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s5" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s6" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="slider">-->
+<!--                  <p>Name</p>-->
+<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s7" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
+<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <th colspan="2">Class Summary</th>
+            </tr>
+            <tr>
+              <td><button onclick="window.location.href = 'http://localhost:3000/qma_summary'" class="ui-button">QMA Summary</button></td>
+              <td><button onclick="window.location.href = 'http://localhost:3000/cma_summary'" class="ui-button">CMA Summary</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="inner-grid">
+        <div>
+          <div id="submission-details">
+            <div id="submission-history">
+              <label><b>Submitted:</b></label>
+              <%= selected_student.submission_time %>
+            </div>
+            <div id="submission-files">
+              <label><b>Submitted Files:</b></label>
+              <span>(Click to load)</span>
+              <div id="submitted-file-list">
+                <% for (let i = 0; i < selected_student.submissions.length; i++) { %>
+                  <div class="submission-file">
+                    <div class="container">
+                      <a class="display_name no-hover" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340&amp;inline=1" title="Preview this File"><%= selected_student.submissions[i].name %></a>
+                      <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
+                    <span class="screenreader-only">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                      </svg>
+                    </span>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+</html>
