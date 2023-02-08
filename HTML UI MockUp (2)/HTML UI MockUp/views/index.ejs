@@ -10,6 +10,7 @@
   </head>
   <script>
     var base_scores = []
+    //this function updates the slider position when user changes the value in the box
     function updateTextInput(parent) {
       var val = -1;
       for (const node of parent.childNodes) {
@@ -42,6 +43,7 @@
         }
       }
     }
+    //this function updates the number value in the box when user changes the slider
     function updateSlider(parent) {
       var val = -1;
       for (const node of parent.childNodes) {
@@ -80,34 +82,33 @@
         }
       }
     }
+    //onload function that is SUPPOSED to take the hidden form values in header (labeled secret) and change them when new values are passed in. Also changes slider color (see comment below)
     function myFunction(){
-      var test = '<%- JSON.stringify(selected_student.submissions[0].QMA_scores) %>';
+      var test = '<%- JSON.stringify(selected_student.submission.file_list[0].QMA_scores) %>';
       test = JSON.parse(test)
       for (let i = 0; i < test.length; i++){
         base_scores.push(test[i])
       }
-      test = '<%- JSON.stringify(selected_student.submissions[0].CMA_scores) %>';
+      test = '<%- JSON.stringify(selected_student.submission.file_list[0].CMA_scores) %>';
       test = JSON.parse(test)
       for (let i = 0; i < test.length; i++){
         base_scores.push(test[i])
       }
 
+      //this will basically set the color of the slider and change it when the slider is changed. No, I don't know how it works, please don't break it because that stackoverflow form is very lost :).
       const Slider2= document.querySelectorAll('input[name=rangeInput2]')
       for (let i = 0; i < Slider2.length; i++) {
         Slider2[i].style.setProperty('--SliderColor', `hsl(${Slider2[i].value}, 100%, 50%)`)
         Slider2[i].oninput =_=> Slider2[i].style.setProperty('--SliderColor', `hsl(${Slider2[i].value}, 100%, 50%)`)
       }
     }
-
   </script>
-
   <!--"https://codepen.io/brandonmcconnell/pen/oJBVQW" -->
   <body onload="myFunction()">
-
     <div id="outer-grid">
       <div id="inner-grid">
         <div>
-          <p><pre><%=selected_student.submissions[0].file_code%></pre></p>
+          <p><pre><%=focus_file.code%></pre></p>
         </div>
       </div>
       <div id="inner-grid">
@@ -116,48 +117,16 @@
             <tr>
               <th colspan="2">Quality Metric Analysis (QMA)</th>
             </tr>
-            <% for (let i = 0; i < selected_student.submissions[0].QMA_names.length; i++) { %>
+            <% for (let i = 0; i < focus_file.QMA_names.length; i++) { %>
               <tr>
                 <td>
                   <div class="slider" align="center">
-                    <p><%= selected_student.submissions[0].QMA_names[i] %></p>
-                    <input id="itr" type="range" min="0" max="100" value=<%= selected_student.submissions[0].QMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1)%>">
+                    <p><%= focus_file.QMA_names[i] %></p>
+                    <input id="itr" type="range" min="0" max="100" value=<%= focus_file.QMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1)%>">
                   </div>
                 </td>
               </tr>
             <% } %>
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="0" class="slider2 test color-QMA s1" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="25" class="slider2 test color-QMA s2" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="66" class="slider2 test color-QMA s3" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="100" class="slider2 test color-QMA s4" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
           </table>
         </div>
         <div>
@@ -165,40 +134,16 @@
             <tr>
               <th colspan="2">Convention Metric Analysis (CMA)</th>
             </tr>
-            <% for (let i = 0; i < selected_student.submissions[0].CMA_names.length; i++) { %>
+            <% for (let i = 0; i < focus_file.CMA_names.length; i++) { %>
               <tr>
                 <td>
                   <div class="slider" align="center">
-                    <p><%= selected_student.submissions[0].CMA_names[i] %></p>
-                    <input id="itr" type="range" min="0" max="100" value=<%= selected_student.submissions[0].CMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1+selected_student.submissions[0].QMA_names.length)%>">
+                    <p><%=  focus_file.CMA_names[i] %></p>
+                    <input id="itr" type="range" min="0" max="100" value=<%=  focus_file.CMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1+focus_file.QMA_names.length)%>">
                   </div>
                 </td>
               </tr>
             <% } %>
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="20" class="slider2 test color-QMA s5" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="100" class="slider2 test color-QMA s6" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider" align="center">-->
-<!--                  <p>Name</p>-->
-<!--                  <input id="itr" type="range" min="0" max="100" value="15" class="slider2 test color-QMA s7" name="rangeInput2">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
           </table>
         </div>
       </div>
@@ -208,53 +153,18 @@
             <tr>
               <th colspan="2">QMA Threshold</th>
             </tr>
-            <% for (let i = 0; i < selected_student.submissions[0].QMA_names.length; i++) { %>
+            <% for (let i = 0; i < focus_file.QMA_names.length; i++) { %>
               <tr>
                 <td>
-                  <div class="slider" align="center">
-                    <p><%= selected_student.submissions[0].QMA_names[i] %></p>
+                  <div class="slider qma-threshold-update" align="center">
+                    <p><%= focus_file.QMA_names[i] %></p>
                     <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
-                    <input type="text" id ="textInput" value="50" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
+                    <input type="text" value=50 id="textInput" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
                     </div>
                 </td>
               </tr>
             <% } %>
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s1" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s2" min="0" max="100" step="10" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s3" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s4" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
+
           </table>
         </div>
         <div>
@@ -262,45 +172,17 @@
             <tr>
               <th colspan="2">CMA Threshold</th>
             </tr>
-            <% for (let i = 0; i < selected_student.submissions[0].CMA_names.length; i++) { %>
+            <% for (let i = 0; i < focus_file.CMA_names.length; i++) { %>
               <tr>
                 <td>
-                  <div class="slider" align="center">
-                    <p><%= selected_student.submissions[0].CMA_names[i] %></p>
-                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1+selected_student.submissions[0].QMA_names.length)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
-                    <input type="text" id ="textInput" value="50" class="slider-value <%='s'+(i+1+selected_student.submissions[0].QMA_names.length)%>" onchange="updateSlider(this.parentNode);">
+                  <div class="slider cma-threshold-update" align="center">
+                    <p><%= focus_file.CMA_names[i] %></p>
+                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.QMA_names.length)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
+                    <input type="text" value=50 id="textInput" class="slider-value <%='s'+(i+1+focus_file.QMA_names.length)%>" onchange="updateSlider(this.parentNode);">
                   </div>
                 </td>
               </tr>
             <% } %>
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s5" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s6" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td>-->
-<!--                <div class="slider">-->
-<!--                  <p>Name</p>-->
-<!--                  <input type="range" id = "rangeInput" name="rangeInput" class="s7" min="0" max="100" onchange="updateTextInput(this.parentNode);">-->
-<!--                  <input type="text" id ="textInput" value="50" class="slider-value" onchange="updateSlider(this.parentNode);">-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </tr>-->
-
           </table>
         </div>
         <div>
@@ -320,16 +202,24 @@
           <div id="submission-details">
             <div id="submission-history">
               <label><b>Submitted:</b></label>
-              <%= selected_student.submission_time %>
+              <%= selected_student.submission.submission_time %>
             </div>
             <div id="submission-files">
               <label><b>Submitted Files:</b></label>
               <span>(Click to load)</span>
               <div id="submitted-file-list">
-                <% for (let i = 0; i < selected_student.submissions.length; i++) { %>
+                <% for (let i = 0; i < selected_student.submission.file_list.length; i++) { %>
                   <div class="submission-file">
                     <div class="container">
-                      <a class="display_name no-hover" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340&amp;inline=1" title="Preview this File"><%= selected_student.submissions[i].name %></a>
+                      <form action="http://localhost:3000/change_file" method="post">
+                        <button class="submission_button" type="submit" name=<%=selected_student.submission.file_list[i].id + '-' +selected_student.studentID%>><%= selected_student.submission.file_list[i].name %></button>
+                        <label>
+                          <input class="secret" name='student_id' value=<%=selected_student.studentID%>>
+                        </label>
+                        <label>
+                          <input class="secret" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
+                        </label>
+                      </form>
                       <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
                     <span class="screenreader-only">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
@@ -341,14 +231,11 @@
                     </div>
                   </div>
                 <% } %>
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
   </body>
 </html>
