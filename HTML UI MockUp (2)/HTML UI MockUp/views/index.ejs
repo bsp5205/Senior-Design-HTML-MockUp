@@ -33,11 +33,9 @@
               }
               qma_color_list[i].setAttribute('value', value);
               myFunction()
-
               break;
             }
           }
-
         }else if(node.id === "textInput"){
           node.value = val;
         }
@@ -52,7 +50,6 @@
           if (val > 100){
             node.value = 100;
           }
-          //change_secret(node.value, node.classList)
         }
       }
       for (const node of parent.childNodes) {
@@ -64,7 +61,6 @@
           let qma_color_list = document.getElementsByClassName("color-QMA");
           for(let i = 0; i < qma_color_list.length; i++){
             if(qma_color_list[i].classList.contains(slider_class_list)){
-              //console.log(base_scores[i])
               let base = base_scores[i]
               let value = 0;
               if(sv < 50){
@@ -94,7 +90,6 @@
       for (let i = 0; i < test.length; i++){
         base_scores.push(test[i])
       }
-
       //this will basically set the color of the slider and change it when the slider is changed. No, I don't know how it works, please don't break it because that stackoverflow form is very lost :).
       const Slider2= document.querySelectorAll('input[name=rangeInput2]')
       for (let i = 0; i < Slider2.length; i++) {
@@ -139,7 +134,7 @@
                 <td>
                   <div class="slider" align="center">
                     <p><%=  focus_file.CMA_names[i] %></p>
-                    <input id="itr" type="range" min="0" max="100" value=<%=  focus_file.CMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1+focus_file.QMA_names.length)%>">
+                    <input id="itr" type="range" min="0" max="100" value=<%=focus_file.CMA_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1+focus_file.QMA_names.length)%>">
                   </div>
                 </td>
               </tr>
@@ -158,8 +153,8 @@
                 <td>
                   <div class="slider qma-threshold-update" align="center">
                     <p><%= focus_file.QMA_names[i] %></p>
-                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
-                    <input type="text" value=50 id="textInput" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
+                    <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1)%> min="0" max="100" value=<%=threshold_list[i]%> onchange="updateTextInput(this.parentNode);">
+                    <input type="text" value=<%=threshold_list[i]%> id="textInput" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
                     </div>
                 </td>
               </tr>
@@ -177,8 +172,8 @@
                 <td>
                   <div class="slider cma-threshold-update" align="center">
                     <p><%= focus_file.CMA_names[i] %></p>
-                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.QMA_names.length)%> min="0" max="100" onchange="updateTextInput(this.parentNode);">
-                    <input type="text" value=50 id="textInput" class="slider-value <%='s'+(i+1+focus_file.QMA_names.length)%>" onchange="updateSlider(this.parentNode);">
+                    <input type="range" id = "rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.QMA_names.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.QMA_names.length]%> onchange="updateTextInput(this.parentNode);">
+                    <input type="text" value=<%=threshold_list[i+focus_file.QMA_names.length]%> id="textInput" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
                   </div>
                 </td>
               </tr>
@@ -211,14 +206,24 @@
                 <% for (let i = 0; i < selected_student.submission.file_list.length; i++) { %>
                   <div class="submission-file">
                     <div class="container">
-                      <form action="http://localhost:3000/change_file" method="post">
+                      <form action="http://localhost:3000/change_file" method="post" id="file_form" class="file_form_test">
                         <button class="submission_button" type="submit" name=<%=selected_student.submission.file_list[i].id + '-' +selected_student.studentID%>><%= selected_student.submission.file_list[i].name %></button>
                         <label>
-                          <input class="secret" name='student_id' value=<%=selected_student.studentID%>>
+                          <input class="secret2" name='student_id' value=<%=selected_student.studentID%>>
                         </label>
                         <label>
-                          <input class="secret" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
+                          <input class="secret2" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
                         </label>
+                        <% for (let i = 0; i < focus_file.QMA_names.length; i++) { %>
+                          <label>
+                            <input class="<%='s'+(i+1)%> secret2 file_threshold" name='fuck' value=<%=threshold_list[i]%>>
+                          </label>
+                        <% } %>
+                        <% for (let i = 0; i < focus_file.CMA_names.length; i++) { %>
+                          <label>
+                            <input class="<%='s'+(i+1+focus_file.QMA_names.length)%> secret2 file_threshold" name='fuck' value=<%=threshold_list[i+focus_file.QMA_names.length]%>>
+                          </label>
+                        <% } %>
                       </form>
                       <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
                     <span class="screenreader-only">

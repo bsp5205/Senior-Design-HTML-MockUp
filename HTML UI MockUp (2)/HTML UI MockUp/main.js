@@ -110,75 +110,33 @@ student_2_submission.file_list.push(file_23);
 student_2.submission = student_2_submission;
 
 student_list.push(student_2)
+let t = [50,50,50,50,50,50,50]
 
 app.get("/", function(req,res){
-    // let student1 = new Student()
-    // student1.name = 'Student 1'
-    // student1.studentID = '123'
-    // student1.submission_time = 'January 1, 2023 at 11:58PM'
-    //
-    // let s1s1 = new Submission()
-    // s1s1.name = 'Homework 1'
-    //
-    // s1s1.file_code = '#include <iostream>\n' +
-    //     '\n' +
-    //     'int main() {\n' +
-    //     '    std::cout << "Hello World!";\n' +
-    //     '    return 0;\n' +
-    //     '}'
-    //
-    // s1s1.QMA_scores = [90, 65, 10, 35];
-    // s1s1.QMA_names = ['CC', 'Coupling', 'Cohesion', 'LOC'];
-    // s1s1.CMA_scores = [100, 80, 65]
-    // s1s1.CMA_names = ['Variable Names', 'Class Names', 'Comment Percentage']
-    // student1.submissions.push(s1s1)
-    //
-    // let student2 = new Student()
-    // student2.name = 'Student 2'
-    // student2.studentID = '456'
-    // student2.submission_time = 'December 30, 2022 at 9:37PM'
-    //
-    // let s2s1 = new Submission()
-    // s2s1.name = 'Homework 1 File'
-    //
-    // s2s1.file_code = 'class HelloWorld {\n' +
-    //     '    public static void main(String[] args) {\n' +
-    //     '        System.out.println("Hello, World!"); \n' +
-    //     '    }\n' +
-    //     '}'
-    //
-    // s2s1.QMA_scores = [10, 20, 50, 25];
-    // s2s1.QMA_names = ['CC', 'Coupling', 'Cohesion', 'LOC'];
-    // s2s1.CMA_scores = [45, 30, 15]
-    // s2s1.CMA_names = ['Variable Names', 'Class Names', 'Comment Percentage']
-    // student2.submissions.push(s2s1)
-    //
-    // student1.submissions.push(s2s1)
-    // student1.submissions.push(s2s1)
-    // let s1 = ['50','50','50','50','50','50','50']
-    // let student_list = [];
-    // student_list.push(student1)
-    // student_list.push(student2)
-
-    res.render("index.ejs", {selected_student:student_list[0], focus_file:student_1_submission.file_list[1],student_list:student_list});
+    res.render("index.ejs", {selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t});
 });
 
 app.post('/change_student', (req, res) =>{
     let id = req.body.student_list;
-    console.log(id)
+    //console.log(id)
+    t = req.body.test;
+    console.log(t)
     //scan each student looking for passed student ID
     for(let i = 0; i < student_list.length; i++){
         if(student_list[i].studentID == id){
-            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list});
+            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t});
         }
     }
 });
 
 app.post('/change_file', (req, res) =>{
     let student_id = req.body.student_id;
-    console.log(student_id)
+    //console.log(student_id);
     let file_id = req.body.file_id;
-    console.log(file_id)
+    //console.log(file_id);
+
+    t = req.body.fuck;
+    console.log(t)
 
     //scan each student looking for passed student ID
     for(let i = 0; i < student_list.length; i++){
@@ -186,7 +144,7 @@ app.post('/change_file', (req, res) =>{
             //scan each file looking for passed file ID
             for(let j = 0; j < student_list[i].submission.file_list.length; j++){
                 if(student_list[i].submission.file_list[j].id == file_id){
-                    res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list});
+                    res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t});
                 }
             }
         }

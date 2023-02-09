@@ -14,16 +14,28 @@
 
     function change_secret(val, class_list){
         let secret_list = document.getElementsByClassName("secret");
-        console.log(class_list[0])
-        let slider_list = document.getElementsByClassName('slider-value')
+        let slider_list = document.getElementsByClassName('slider-value');
+
+        let file_form_test = document.getElementsByClassName("file_form_test");
+
+        let file_threshold_secret_list = document.getElementsByClassName("file_threshold");
+
+        //console.log(file_threshold_secret_list)
+        let secret2_list = document.getElementsByClassName("secret2")
+        for(let i = 0; i < secret2_list.length; i++){
+            if(secret2_list[i].classList.contains(class_list[0])){
+                secret2_list[i].setAttribute("value", val)
+                console.log(secret2_list[i].value)
+            }
+        }
 
         for(let i=0; i < slider_list.length; i++){
             if(slider_list[i].classList.contains(class_list[0])){
                 secret_list[i].value = val;
-                console.log(secret_list[i].value)
+                // console.log(secret_list[i].value);
+                // console.log(class_list[0]);
             }
         }
-
     }
 </script>
 <div id="gradebook_header" class="subheadContent" style="">
@@ -55,7 +67,6 @@
                     <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
                 </svg>
             </button>
-
             <form action="http://localhost:3000/change_student" method="post">
                 <select name="student_list" id="student-list" class="student-selection-class" onchange="this.form.submit()">
                     <% for (let i = 0; i < student_list.length; i++) { %>
@@ -68,15 +79,14 @@
                 </select>
                 <% for (let i = 0; i < focus_file.QMA_names.length; i++) { %>
                     <label>
-                        <input class="secret" name='test' value="50">
+                        <input class="secret" name='test' value=<%=threshold_list[i]%>>
                     </label>
                 <% } %>
                 <% for (let i = 0; i < focus_file.CMA_names.length; i++) { %>
-                <label>
-                    <input class="secret" name='test' value="50">
-                </label>
+                    <label>
+                        <input class="secret" name='test' value=<%=threshold_list[i+focus_file.QMA_names.length]%>>
+                    </label>
                 <% } %>
-
             </form>
             <button id="next-student-button" class="Button Button--icon-action gradebookMoveToNext next" type="button" aria-label="Next">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
