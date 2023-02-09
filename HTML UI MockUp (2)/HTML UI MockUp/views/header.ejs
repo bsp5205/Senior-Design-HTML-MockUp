@@ -25,15 +25,22 @@
         for(let i = 0; i < secret2_list.length; i++){
             if(secret2_list[i].classList.contains(class_list[0])){
                 secret2_list[i].setAttribute("value", val)
-                console.log(secret2_list[i].value)
+                //console.log(secret2_list[i].value)
             }
         }
-
+        // let qma_threshold_update = document.getElementsByClassName("qma-threshold-update");
+        // for(let i = 0; i < qma_threshold_update.length; i++){
+        //     updateTextInput(qma_threshold_update[i])
+        // }
+        // let cma_threshold_update = document.getElementsByClassName("cma-threshold-update");
+        // for(let i = 0; i < cma_threshold_update.length; i++){
+        //     updateTextInput(cma_threshold_update[i])
+        // }
+        console.log(slider_list.length)
         for(let i=0; i < slider_list.length; i++){
             if(slider_list[i].classList.contains(class_list[0])){
                 secret_list[i].value = val;
-                // console.log(secret_list[i].value);
-                // console.log(class_list[0]);
+                //console.log(secret_list[i].value, class_list[0]);
             }
         }
     }
