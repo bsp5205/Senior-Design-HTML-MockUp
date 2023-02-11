@@ -383,6 +383,10 @@ input[type='range']::-webkit-slider-thumb {
   display: none;
 }
 
+.secret3{
+  display: none;
+}
+
 .summary-table table{
   border: 1px solid #c7cdd1;
   border-collapse: collapse;

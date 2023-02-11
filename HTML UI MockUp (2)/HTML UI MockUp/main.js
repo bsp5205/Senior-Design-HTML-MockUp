@@ -76,7 +76,7 @@ student_list.push(student_1);
 
 let student_2 = new Student();
 student_2.name = 'Student 2';
-student_1.studentID = '456';
+student_2.studentID = '456';
 let student_2_submission = new Submission();
 student_2_submission.submission_time = 'December 29, 2022 at 2:15PM';
 
@@ -113,7 +113,8 @@ student_list.push(student_2)
 let t = [50,50,50,50,50,50,50]
 
 app.get("/", function(req,res){
-    res.render("index.ejs", {selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t});
+    let prev_student = student_list[0]
+    res.render("index.ejs", {selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t, next_student:student_list[1], prev_student:prev_student});
 });
 
 app.post('/change_student', (req, res) =>{
@@ -121,10 +122,45 @@ app.post('/change_student', (req, res) =>{
     //console.log(id)
     t = req.body.test;
     console.log(t)
+    let next_student;
+    let prev_student;
     //scan each student looking for passed student ID
     for(let i = 0; i < student_list.length; i++){
         if(student_list[i].studentID == id){
-            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t});
+            if(i == 0){
+                prev_student = student_list[i]
+                next_student = student_list[i + 1]
+            } else if(i == student_list.length - 1){
+                next_student = student_list[i]
+                prev_student = student_list[i - 1]
+            } else{
+                next_student = student_list[i + 1]
+                prev_student = student_list[i - 1]
+            }
+            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+        }
+    }
+});
+
+app.post('/next_student', (req, res) =>{
+    let id = req.body.next_student;
+    console.log(id)
+    let next_student;
+    let prev_student;
+    //scan each student looking for passed student ID
+    for(let i = 0; i < student_list.length; i++){
+        if(student_list[i].studentID == id){
+            if(i == 0){
+                prev_student = student_list[i]
+                next_student = student_list[i + 1]
+            } else if(i == student_list.length - 1){
+                next_student = student_list[i]
+                prev_student = student_list[i - 1]
+            } else{
+                next_student = student_list[i + 1]
+                prev_student = student_list[i - 1]
+            }
+            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
         }
     }
 });
@@ -136,15 +172,28 @@ app.post('/change_file', (req, res) =>{
     //console.log(file_id);
 
     t = req.body.fuck;
-    console.log(t)
+    console.log(t);
+
+    let next_student;
+    let prev_student;
 
     //scan each student looking for passed student ID
     for(let i = 0; i < student_list.length; i++){
         if(student_list[i].studentID == student_id){
             //scan each file looking for passed file ID
             for(let j = 0; j < student_list[i].submission.file_list.length; j++){
+                if(i == 0){
+                    prev_student = student_list[i]
+                    next_student = student_list[i + 1]
+                } else if(i == student_list.length - 1){
+                    next_student = student_list[i]
+                    prev_student = student_list[i - 1]
+                } else{
+                    next_student = student_list[i + 1]
+                    prev_student = student_list[i - 1]
+                }
                 if(student_list[i].submission.file_list[j].id == file_id){
-                    res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t});
+                    res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
                 }
             }
         }
