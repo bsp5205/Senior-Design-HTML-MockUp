@@ -10,6 +10,26 @@
   </head>
   <script>
     var base_scores = []
+    var color_scores = []
+    function open_cma_form() {
+      document.getElementById("cma_form").style.display = "block";
+      document.getElementById("outer-grid").style.display = "none";
+    }
+
+    function close_cma_form() {
+      document.getElementById("cma_form").style.display = "none";
+      document.getElementById("outer-grid").style.display = "grid";
+    }
+
+    function open_qma_form() {
+      document.getElementById("qma_form").style.display = "block";
+      document.getElementById("outer-grid").style.display = "none";
+    }
+
+    function close_qma_form() {
+      document.getElementById("qma_form").style.display = "none";
+      document.getElementById("outer-grid").style.display = "grid";
+    }
     //this function updates the slider position when user changes the value in the box
     function updateTextInput(parent) {
       var val = -1;
@@ -17,9 +37,11 @@
         if(node.id === "rangeInput"){
           val = node.value;
           let sv = node.value;
-          change_secret(sv, node.classList)
+          change_secret(sv, node.classList);
+
           let slider_class_list = node.classList.value;
           let qma_color_list = document.getElementsByClassName("color-QMA");
+          let color_bar_value_list = document.getElementsByClassName("color_bar_value");
           for(let i = 0; i < qma_color_list.length; i++){
             if(qma_color_list[i].classList.contains(slider_class_list)){
               let base = base_scores[i]
@@ -31,7 +53,14 @@
               }else{
                 value = base
               }
+              if(value < 0){
+                value = 0;
+              }else if (value > 100){
+                value = 100
+              }
               qma_color_list[i].setAttribute('value', value);
+              change_test(value, node.classList);
+              //color_bar_value_list[i].setAttribute('value', value);
               myFunction()
               break;
             }
@@ -57,9 +86,10 @@
         if(node.id === "rangeInput"){
           node.value = val;
           let sv = node.value;
-          change_secret(sv, node.classList)
+          change_secret(sv, node.classList);
           let slider_class_list = node.classList.value;
           let qma_color_list = document.getElementsByClassName("color-QMA");
+          let color_bar_value_list = document.getElementsByClassName("color_bar_value");
           for(let i = 0; i < qma_color_list.length; i++){
             if(qma_color_list[i].classList.contains(slider_class_list)){
               let base = base_scores[i]
@@ -71,7 +101,14 @@
               }else{
                 value = base
               }
+              if(value < 0){
+                value = 0;
+              }else if (value > 100){
+                value = 100
+              }
               qma_color_list[i].setAttribute('value', value);
+              change_test(value, node.classList);
+              //color_bar_value_list[i].setAttribute('value', value);
               myFunction()
               break;
             }
@@ -79,6 +116,18 @@
         }
       }
     }
+
+    function change_test(value, class_list){
+      console.log(value);
+      let color_bar_value_list = document.getElementsByClassName("color_bar_value");
+      for (let i = 0; i < color_bar_value_list.length; i++) {
+        if(color_bar_value_list[i].classList.contains(class_list[0])){
+          color_bar_value_list[i].setAttribute("value", value)
+          //console.log(secret2_list[i].value)
+        }
+      }
+    }
+
     //onload function that is SUPPOSED to take the hidden form values in header (labeled secret) and change them when new values are passed in. Also changes slider color (see comment below)
     function myFunction(){
       var test = '<%- JSON.stringify(selected_student.submission.file_list[0].QMA_scores) %>';
@@ -95,23 +144,6 @@
       const Slider2= document.querySelectorAll('input[name=rangeInput2]')
       test = '<%- JSON.stringify(threshold_list) %>';
       test = JSON.parse(test)
-      console.log(parseInt(test[0]))
-      // let qma_color_list = document.getElementsByClassName("color-QMA");
-      // for(let i = 0; i < qma_color_list.length; i++){
-      //   if(qma_color_list[i].classList.contains(slider_class_list)){
-      //     let base = base_scores[i]
-      //     let value = 0;
-      //     if(sv < 50){
-      //       value = base - (sv - 50)
-      //     }else if (sv > 50){
-      //       value = base + ((-1 * sv) + 50)
-      //     }else{
-      //       value = base
-      //     }
-      //     qma_color_list[i].setAttribute('value', value);
-      //     myFunction()
-      //     break;
-      //   }
 
       for (let i = 0; i < Slider2.length; i++) {
         //console.log(Slider2[i].value)
@@ -119,11 +151,135 @@
         Slider2[i].oninput =_=> Slider2[i].style.setProperty('--SliderColor', `hsl(${Slider2[i].value}, 100%, 50%)`)
       }
 
+      const score_list= document.querySelectorAll('td[class=score]')
+      for (let i = 0; i < score_list.length; i++) {
+        console.log(score_list[i].innerHTML)
+        score_list[i].style.setProperty('background-color', `hsl(${score_list[i].innerHTML}, 100%, 50%)`)
+      }
 
     }
   </script>
   <!--"https://codepen.io/brandonmcconnell/pen/oJBVQW" -->
   <body onload="myFunction()">
+    <div class="cma-popup" id="cma_form">
+      <div id="outer-grid-summary">
+        <div id="inner-grid-summary">
+          <div class="summary-table">
+            <table>
+              <tr>
+                <th colspan="4">CMA Metric Analysis Report</th>
+              </tr>
+              <tr>
+                <th>Student ID</th>
+                <th>Variable Names</th>
+                <th>Class Names</th>
+                <th>Comment Percentage</th>
+              </tr>
+              <tr>
+                <td>000123</td>
+                <td class="score">10</td>
+                <td class="score">55</td>
+                <td class="score">30</td>
+              </tr>
+
+              <tr>
+                <td>000456</td>
+                <td class="score">10</td>
+                <td class="score">20</td>
+                <td class="score">35</td>
+              </tr>
+
+              <tr>
+                <td>000789</td>
+                <td class="score">100</td>
+                <td class="score">30</td>
+                <td class="score">70</td>
+              </tr>
+
+              <tr>
+                <td>101112</td>
+                <td class="score">65</td>
+                <td class="score">20</td>
+                <td class="score">15</td>
+              </tr>
+
+            </table>
+          </div>
+        </div>
+        <div id="inner-grid-summary">
+          <div>
+            <table>
+              <tr>
+                <th colspan="2">CMA Summary Observations</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn cancel ui-button" onclick="close_cma_form()">Close Summary</button>
+    </div>
+    <div class="qma-popup" id="qma_form">
+      <div id="outer-grid-summary">
+        <div id="inner-grid-summary">
+          <div class="summary-table">
+            <table>
+              <tr>
+                <th colspan="4">QMA Metric Analysis Report</th>
+              </tr>
+              <tr>
+                <th>Student ID</th>
+                <th>Cyclo Complexity</th>
+                <th>Coupling</th>
+                <th>Cohesion</th>
+                <th>LOC</th>
+              </tr>
+              <tr>
+                <td>000123</td>
+                <td class="score">10</td>
+                <td class="score">55</td>
+                <td class="score">30</td>
+                <td class="score">45</td>
+              </tr>
+
+              <tr>
+                <td>000456</td>
+                <td class="score">10</td>
+                <td class="score">20</td>
+                <td class="score">35</td>
+                <td class="score">40</td>
+              </tr>
+
+              <tr>
+                <td>000789</td>
+                <td class="score">100</td>
+                <td class="score">30</td>
+                <td class="score">70</td>
+                <td class="score">40</td>
+              </tr>
+
+              <tr>
+                <td>101112</td>
+                <td class="score">65</td>
+                <td class="score">20</td>
+                <td class="score">15</td>
+                <td class="score">75</td>
+              </tr>
+
+            </table>
+          </div>
+        </div>
+        <div id="inner-grid-summary">
+          <div>
+            <table>
+              <tr>
+                <th colspan="2">QMA Summary Observations</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn cancel ui-button" onclick="close_qma_form()">Close Summary</button>
+    </div>
     <div id="outer-grid">
       <div id="inner-grid">
         <div>
@@ -210,8 +366,10 @@
               <th colspan="2">Class Summary</th>
             </tr>
             <tr>
-              <td><button onclick="window.location.href = 'http://localhost:3000/qma_summary'" class="ui-button">QMA Summary</button></td>
-              <td><button onclick="window.location.href = 'http://localhost:3000/cma_summary'" class="ui-button">CMA Summary</button></td>
+              <td><button class="open-button ui-button" onclick="open_qma_form()">QMA Summary</button></td>
+              <td><button class="open-button ui-button" onclick="open_cma_form()">CMA Summary</button></td>
+<!--              <td><button onclick="window.location.href = 'http://localhost:3000/qma_summary'" class="ui-button">QMA Summary</button></td>-->
+<!--              <td><button onclick="window.location.href = 'http://localhost:3000/cma_summary'" class="ui-button">CMA Summary</button></td>-->
             </tr>
           </table>
         </div>
@@ -243,6 +401,7 @@
                             <input class="<%='s'+(i+1)%> secret2 file_threshold" name='fuck' value=<%=threshold_list[i]%>>
                           </label>
                         <% } %>
+
                         <% for (let i = 0; i < focus_file.CMA_names.length; i++) { %>
                           <label>
                             <input class="<%='s'+(i+1+focus_file.QMA_names.length)%> secret2 file_threshold" name='fuck' value=<%=threshold_list[i+focus_file.QMA_names.length]%>>

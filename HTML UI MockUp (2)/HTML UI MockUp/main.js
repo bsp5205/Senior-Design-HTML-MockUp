@@ -114,14 +114,18 @@ let t = [50,50,50,50,50,50,50]
 
 app.get("/", function(req,res){
     let prev_student = student_list[0]
-    res.render("index.ejs", {selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t, next_student:student_list[1], prev_student:prev_student});
+    res.render("index.ejs", {displayed_file_id:student_list[0].submission.file_list[0].id, selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t, next_student:student_list[1], prev_student:prev_student});
 });
 
 app.post('/change_student', (req, res) =>{
     let id = req.body.student_list;
     //console.log(id)
     t = req.body.test;
-    console.log(t)
+    //console.log(t)
+
+    let temp = req.body.fuck2;
+    console.log(temp)
+
     let next_student;
     let prev_student;
     //scan each student looking for passed student ID
@@ -137,7 +141,8 @@ app.post('/change_student', (req, res) =>{
                 next_student = student_list[i + 1]
                 prev_student = student_list[i - 1]
             }
-            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+            student_list[i].QMA_scores = temp;
+            res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[i].id, selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
         }
     }
 });
@@ -147,6 +152,10 @@ app.post('/next_student', (req, res) =>{
     console.log(id)
     let next_student;
     let prev_student;
+
+    let temp = req.body.fuck2;
+    console.log(temp)
+
     //scan each student looking for passed student ID
     for(let i = 0; i < student_list.length; i++){
         if(student_list[i].studentID == id){
@@ -160,7 +169,7 @@ app.post('/next_student', (req, res) =>{
                 next_student = student_list[i + 1]
                 prev_student = student_list[i - 1]
             }
-            res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+            res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[i].id, selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
         }
     }
 });
@@ -172,8 +181,25 @@ app.post('/change_file', (req, res) =>{
     //console.log(file_id);
 
     t = req.body.fuck;
-    console.log(t);
+    console.log(t)
 
+    // let qma_changes = req.body.fuck2;
+    // console.log(qma_changes)
+    //
+    // let cma_changes = req.body.fuck3;
+    // console.log(cma_changes);
+    //
+    // let prev_displayed_file_id = req.body.displayed_file_id;
+    // console.log(prev_displayed_file_id);
+    //
+    // for(let i = 0; i < student_list.length; i++) {
+    //     if(student_list[i].studentID == student_id){
+    //         for(let j = 0; j < student_list[i].submission.file_list.length; j++){
+    //                 student_list[j].submission.file_list[j].QMA_scores = qma_changes;
+    //                 student_list[j].submission.file_list[j].CMA_scores = cma_changes;
+    //         }
+    //     }
+    // }
     let next_student;
     let prev_student;
 
@@ -181,6 +207,7 @@ app.post('/change_file', (req, res) =>{
     for(let i = 0; i < student_list.length; i++){
         if(student_list[i].studentID == student_id){
             //scan each file looking for passed file ID
+
             for(let j = 0; j < student_list[i].submission.file_list.length; j++){
                 if(i == 0){
                     prev_student = student_list[i]
@@ -193,7 +220,7 @@ app.post('/change_file', (req, res) =>{
                     prev_student = student_list[i - 1]
                 }
                 if(student_list[i].submission.file_list[j].id == file_id){
-                    res.render("index.ejs", {selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+                    res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[j].id,selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
                 }
             }
         }
