@@ -61,11 +61,11 @@ file_1.code = '#include <iostream>\n' +
 
 file_1.QMA_scores = [90, 65, 10, 35];
 
-file_1.complexity_scores = [10, 20, 30, 40];
-file_1.coupling_scores = [10, 20];
-file_1.cohesion_scores = [10, 20, 30];
-file_1.naming_scores= [1,2,3];
-file_1.general_scores = [1,2];
+file_1.complexity_scores = [90, 60, 50, 60];
+file_1.coupling_scores = [70, 40];
+file_1.cohesion_scores = [50, 40, 40];
+file_1.naming_scores= [50,70,80];
+file_1.general_scores = [80,60];
 
 file_1.CMA_scores = [100, 80, 65];
 
@@ -80,11 +80,11 @@ file_2.code = '#include <iostream>\n' +
     '}'
 file_2.QMA_scores = [0, 40, 10, 5];
 
-file_2.complexity_scores = [10, 20, 30, 40];
-file_2.coupling_scores = [10, 20];
-file_2.cohesion_scores = [10, 20, 30];
-file_2.naming_scores = [1,2,3];
-file_2.general_scores= [1,2];
+file_2.complexity_scores = [70, 40, 50, 60];
+file_2.coupling_scores = [50, 60];
+file_2.cohesion_scores = [80, 90, 40];
+file_2.naming_scores = [30,60,50];
+file_2.general_scores= [60,70];
 
 file_2.CMA_scores = [87, 55, 40];
 
@@ -113,11 +113,11 @@ file_12.code = '#include <iostream>\n' +
     '}'
 file_12.QMA_scores = [100, 33, 67, 12];
 
-file_12.complexity_scores = [10, 20, 30, 40];
-file_12.coupling_scores = [10, 20];
-file_12.cohesion_scores = [10, 20, 30];
-file_12.naming_scores = [1,2,3];
-file_12.general_scores = [1,2];
+file_12.complexity_scores = [60, 20, 60, 40];
+file_12.coupling_scores = [90, 30];
+file_12.cohesion_scores = [40, 30, 70];
+file_12.naming_scores = [40,70,60];
+file_12.general_scores = [80,70];
 
 
 file_12.CMA_scores = [34, 56, 76];
@@ -133,11 +133,11 @@ file_23.code = '#include <iostream>\n' +
     '}'
 file_23.QMA_scores = [45, 67, 43, 43];
 
-file_23.complexity_scores = [10, 20, 30, 40];
-file_23.coupling_scores = [10, 20];
-file_23.cohesion_scores = [10, 20, 30];
-file_23.naming_scores = [1,2,3];
-file_23.general_scores = [1,2];
+file_23.complexity_scores = [60, 80, 40, 60];
+file_23.coupling_scores = [60, 50];
+file_23.cohesion_scores = [70, 80, 50];
+file_23.naming_scores = [40,60,80];
+file_23.general_scores = [90,50];
 
 file_23.CMA_scores = [43, 56, 78];
 

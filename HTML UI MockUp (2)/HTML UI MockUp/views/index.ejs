@@ -191,12 +191,17 @@
               <% for (let i = 0; i < student_list.length; i++) { %>
                 <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
                   <tr>
-                    <td>
-                      <%= student_list[i].name %>
-                    </td>
-                    <td>
-                      <%= student_list[i].studentID %>
-                    </td>
+                    <%if(j == 0){%>
+                      <td>
+                        <%= student_list[i].name %>
+                      </td>
+                      <td>
+                        <%= student_list[i].studentID %>
+                      </td>
+                    <%}else{%>
+                      <td></td>
+                      <td></td>
+                    <%}%>
                     <td>
                       <%= student_list[i].submission.file_list[j].name%>
                     </td>
@@ -261,12 +266,17 @@
               <% for (let i = 0; i < student_list.length; i++) { %>
                 <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
                   <tr>
-                    <td>
-                      <%= student_list[i].name %>
-                    </td>
-                    <td>
-                      <%= student_list[i].studentID %>
-                    </td>
+                    <%if(j == 0){%>
+                      <td>
+                        <%= student_list[i].name %>
+                      </td>
+                      <td>
+                        <%= student_list[i].studentID %>
+                      </td>
+                    <%}else{%>
+                      <td></td>
+                      <td></td>
+                    <%}%>
                     <td>
                       <%= student_list[i].submission.file_list[j].name%>
                     </td>
@@ -441,7 +451,7 @@
                 </td>
                 <td>
                   <div class="slider qma-threshold-update">
-                    <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length)%> min="0" max="100" value=<%=threshold_list[i]%> onchange="updateTextInput(this.parentNode);">
+                    <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length]%> onchange="updateTextInput(this.parentNode);">
                     <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length)%>" onchange="updateSlider(this.parentNode);">
                   </div>
                 </td>
