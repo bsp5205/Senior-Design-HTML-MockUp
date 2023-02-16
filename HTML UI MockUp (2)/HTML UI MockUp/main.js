@@ -50,7 +50,7 @@ let student_1_submission = new Submission();
 student_1_submission.submission_time = 'December 30, 2022 at 9:37PM';
 
 let file_1 = new Submission_File();
-file_1.name = 'Test';
+file_1.name = 'Homework1.cpp';
 file_1.id = '1';
 file_1.code = '#include <iostream>\n' +
     '\n' +
@@ -70,7 +70,7 @@ file_1.general_scores = [1,2];
 file_1.CMA_scores = [100, 80, 65];
 
 let file_2 = new Submission_File();
-file_2.name = 'Test 2'
+file_2.name = 'Homework1-2.cpp'
 file_2.id = '2'
 file_2.code = '#include <iostream>\n' +
     '\n' +
@@ -103,7 +103,7 @@ let student_2_submission = new Submission();
 student_2_submission.submission_time = 'December 29, 2022 at 2:15PM';
 
 let file_12 = new Submission_File();
-file_12.name = 'Student 2 Test blah blah blah blah blah blah this will probably break everything and I will suffer more bc of Trinity';
+file_12.name = 'Homework1.cpp';
 file_12.id = '1';
 file_12.code = '#include <iostream>\n' +
     '\n' +
@@ -123,7 +123,7 @@ file_12.general_scores = [1,2];
 file_12.CMA_scores = [34, 56, 76];
 
 let file_23 = new Submission_File();
-file_23.name = 'Student 2 Test 2'
+file_23.name = 'Homework1_2.cpp'
 file_23.id = '2'
 file_23.code = '#include <iostream>\n' +
     '\n' +

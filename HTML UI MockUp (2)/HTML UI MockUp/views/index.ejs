@@ -169,42 +169,50 @@
           <div class="summary-table">
             <table>
               <tr>
-                <th colspan="4">CMA Metric Analysis Report</th>
-              </tr>
-              <tr>
-                <th>Student ID</th>
-                <th>Variable Names</th>
-                <th>Class Names</th>
-                <th>Comment Percentage</th>
-              </tr>
-              <tr>
-                <td>000123</td>
-                <td class="score">10</td>
-                <td class="score">55</td>
-                <td class="score">30</td>
+                <th colspan="7">CMA Metric Analysis Report</th>
               </tr>
 
               <tr>
-                <td>000456</td>
-                <td class="score">10</td>
-                <td class="score">20</td>
-                <td class="score">35</td>
+                <th colspan="3"></th>
+                <th colspan="2">General</th>
+                <th colspan="3">Naming Conventions</th>
               </tr>
 
               <tr>
-                <td>000789</td>
-                <td class="score">100</td>
-                <td class="score">30</td>
-                <td class="score">70</td>
+                <td>Student Name</td>
+                <td>Student ID</td>
+                <td>File</td>
+                <td>Comment Percentage (CP)</td>
+                <td>Token Count (TC)</td>
+                <td>Class</td>
+                <td>Method</td>
+                <td>Variable</td>
               </tr>
-
-              <tr>
-                <td>101112</td>
-                <td class="score">65</td>
-                <td class="score">20</td>
-                <td class="score">15</td>
-              </tr>
-
+              <% for (let i = 0; i < student_list.length; i++) { %>
+                <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
+                  <tr>
+                    <td>
+                      <%= student_list[i].name %>
+                    </td>
+                    <td>
+                      <%= student_list[i].studentID %>
+                    </td>
+                    <td>
+                      <%= student_list[i].submission.file_list[j].name%>
+                    </td>
+                    <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
+                      <td class="score">
+                        <%=student_list[i].submission.file_list[j].general_scores[k]%>
+                      </td>
+                    <% } %>
+                    <% for (let k = 0; k < student_list[i].submission.file_list[j].naming_scores.length; k++) { %>
+                      <td class="score">
+                        <%=student_list[i].submission.file_list[j].naming_scores[k]%>
+                      </td>
+                    <% } %>
+                  </tr>
+                <% } %>
+              <% } %>
             </table>
           </div>
         </div>
@@ -228,45 +236,58 @@
               <tr>
                 <th colspan="4">QMA Metric Analysis Report</th>
               </tr>
+
               <tr>
-                <th>Student ID</th>
-                <th>Cyclo Complexity</th>
-                <th>Coupling</th>
-                <th>Cohesion</th>
-                <th>LOC</th>
-              </tr>
-              <tr>
-                <td>000123</td>
-                <td class="score">10</td>
-                <td class="score">55</td>
-                <td class="score">30</td>
-                <td class="score">45</td>
+                <th colspan="3"></th>
+                <th colspan="4">Complexity</th>
+                <th colspan="2">Coupling</th>
+                <th colspan="3">Cohesion</th>
               </tr>
 
               <tr>
-                <td>000456</td>
-                <td class="score">10</td>
-                <td class="score">20</td>
-                <td class="score">35</td>
-                <td class="score">40</td>
+                <td>Student Name</td>
+                <td>Student ID</td>
+                <td>File</td>
+                <td>Cyclomatic Complexity (CC)</td>
+                <td>Lines of Code (LOC)</td>
+                <td>Weighted Methods per Class (WMC)</td>
+                <td>ABC</td>
+                <td>Coupling Factor (COF)</td>
+                <td>Coupling between objects (CBO)</td>
+                <td>Depth of Inheritance (DIT)</td>
+                <td>Method Hiding Factor (MHF)</td>
+                <td>Attribute Hiding Factor (AHF)</td>
               </tr>
-
-              <tr>
-                <td>000789</td>
-                <td class="score">100</td>
-                <td class="score">30</td>
-                <td class="score">70</td>
-                <td class="score">40</td>
-              </tr>
-
-              <tr>
-                <td>101112</td>
-                <td class="score">65</td>
-                <td class="score">20</td>
-                <td class="score">15</td>
-                <td class="score">75</td>
-              </tr>
-
+              <% for (let i = 0; i < student_list.length; i++) { %>
+                <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
+                  <tr>
+                    <td>
+                      <%= student_list[i].name %>
+                    </td>
+                    <td>
+                      <%= student_list[i].studentID %>
+                    </td>
+                    <td>
+                      <%= student_list[i].submission.file_list[j].name%>
+                    </td>
+                    <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
+                    <td class="score">
+                      <%=student_list[i].submission.file_list[j].complexity_scores[k]%>
+                    </td>
+                    <% } %>
+                    <% for (let k = 0; k < student_list[i].submission.file_list[j].coupling_scores.length; k++) { %>
+                    <td class="score">
+                      <%=student_list[i].submission.file_list[j].coupling_scores[k]%>
+                    </td>
+                    <% } %>
+                    <% for (let k = 0; k < student_list[i].submission.file_list[j].cohesion_scores.length; k++) { %>
+                    <td class="score">
+                      <%=student_list[i].submission.file_list[j].cohesion_scores[k]%>
+                    </td>
+                    <% } %>
+                  </tr>
+                <% } %>
+              <% } %>
             </table>
           </div>
         </div>
