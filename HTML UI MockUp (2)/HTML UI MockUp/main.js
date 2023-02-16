@@ -34,6 +34,14 @@ class Submission_File{
     CMA_names = ['Variable Names', 'Class Names', 'Comment Percentage'];
 }
 
+let complexity_names = ['Cyclomatic Complexity (CC)', 'Lines of Code (LOC)', 'Weighted Methods per Class (WMC)', 'ABC'];
+let coupling_names = ['Coupling Factor (COF)', 'Coupling between objects (CBO)'];
+let cohesion_names = ['Depth of Inheritance (DIT)', 'Method Hiding Factor (MHF)', 'Attribute Hiding Factor (AHF)'];
+
+let naming_names = ['Class', 'Method', 'Attribute'];
+let general_names = ['Comment Percentage (CP)', 'Token Count (TC)'];
+
+
 let student_1 = new Student();
 student_1.name = 'Student 1';
 student_1.studentID = '123';
@@ -52,6 +60,13 @@ file_1.code = '#include <iostream>\n' +
     '}'
 
 file_1.QMA_scores = [90, 65, 10, 35];
+
+file_1.complexity_scores = [10, 20, 30, 40];
+file_1.coupling_scores = [10, 20];
+file_1.cohesion_scores = [10, 20, 30];
+file_1.naming_scores= [1,2,3];
+file_1.general_scores = [1,2];
+
 file_1.CMA_scores = [100, 80, 65];
 
 let file_2 = new Submission_File();
@@ -64,6 +79,13 @@ file_2.code = '#include <iostream>\n' +
     '    return 0;\n' +
     '}'
 file_2.QMA_scores = [0, 40, 10, 5];
+
+file_2.complexity_scores = [10, 20, 30, 40];
+file_2.coupling_scores = [10, 20];
+file_2.cohesion_scores = [10, 20, 30];
+file_2.naming_scores = [1,2,3];
+file_2.general_scores= [1,2];
+
 file_2.CMA_scores = [87, 55, 40];
 
 student_1_submission.file_list.push(file_1);
@@ -81,7 +103,7 @@ let student_2_submission = new Submission();
 student_2_submission.submission_time = 'December 29, 2022 at 2:15PM';
 
 let file_12 = new Submission_File();
-file_12.name = 'Student 2 Test';
+file_12.name = 'Student 2 Test blah blah blah blah blah blah this will probably break everything and I will suffer more bc of Trinity';
 file_12.id = '1';
 file_12.code = '#include <iostream>\n' +
     '\n' +
@@ -90,6 +112,14 @@ file_12.code = '#include <iostream>\n' +
     '    return 0;\n' +
     '}'
 file_12.QMA_scores = [100, 33, 67, 12];
+
+file_12.complexity_scores = [10, 20, 30, 40];
+file_12.coupling_scores = [10, 20];
+file_12.cohesion_scores = [10, 20, 30];
+file_12.naming_scores = [1,2,3];
+file_12.general_scores = [1,2];
+
+
 file_12.CMA_scores = [34, 56, 76];
 
 let file_23 = new Submission_File();
@@ -102,6 +132,13 @@ file_23.code = '#include <iostream>\n' +
     '    return 0;\n' +
     '}'
 file_23.QMA_scores = [45, 67, 43, 43];
+
+file_23.complexity_scores = [10, 20, 30, 40];
+file_23.coupling_scores = [10, 20];
+file_23.cohesion_scores = [10, 20, 30];
+file_23.naming_scores = [1,2,3];
+file_23.general_scores = [1,2];
+
 file_23.CMA_scores = [43, 56, 78];
 
 student_2_submission.file_list.push(file_12);
@@ -110,21 +147,21 @@ student_2_submission.file_list.push(file_23);
 student_2.submission = student_2_submission;
 
 student_list.push(student_2)
-let t = [50,50,50,50,50,50,50]
+let t = [50,50,50,50,50,50,50,50,50,50,50,50,50,50]
 
 app.get("/", function(req,res){
     let prev_student = student_list[0]
-    res.render("index.ejs", {displayed_file_id:student_list[0].submission.file_list[0].id, selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t, next_student:student_list[1], prev_student:prev_student});
+    res.render("index.ejs", {displayed_file_id:student_list[0].submission.file_list[0].id, selected_student:student_list[0], focus_file:student_1_submission.file_list[0],student_list:student_list, threshold_list:t, next_student:student_list[1], prev_student:prev_student, complexity_names:complexity_names, coupling_names:coupling_names, cohesion_names:cohesion_names, naming_names:naming_names, general_names:general_names});
 });
 
 app.post('/change_student', (req, res) =>{
     let id = req.body.student_list;
     //console.log(id)
     t = req.body.test;
-    //console.log(t)
+    console.log(t)
 
     let temp = req.body.fuck2;
-    console.log(temp)
+
 
     let next_student;
     let prev_student;
@@ -142,7 +179,7 @@ app.post('/change_student', (req, res) =>{
                 prev_student = student_list[i - 1]
             }
             student_list[i].QMA_scores = temp;
-            res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[i].id, selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+            res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[i].id, selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student, complexity_names:complexity_names, coupling_names:coupling_names, cohesion_names:cohesion_names, naming_names:naming_names, general_names:general_names});
         }
     }
 });
@@ -169,7 +206,7 @@ app.post('/next_student', (req, res) =>{
                 next_student = student_list[i + 1]
                 prev_student = student_list[i - 1]
             }
-            res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[i].id, selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+            res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[i].id, selected_student:student_list[i],focus_file:student_list[i].submission.file_list[0], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student, complexity_names:complexity_names, coupling_names:coupling_names, cohesion_names:cohesion_names, naming_names:naming_names, general_names:general_names});
         }
     }
 });
@@ -220,7 +257,7 @@ app.post('/change_file', (req, res) =>{
                     prev_student = student_list[i - 1]
                 }
                 if(student_list[i].submission.file_list[j].id == file_id){
-                    res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[j].id,selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student});
+                    res.render("index.ejs", {displayed_file_id:student_list[i].submission.file_list[j].id,selected_student:student_list[i],focus_file:student_list[i].submission.file_list[j], student_list:student_list, threshold_list:t, next_student:next_student, prev_student:prev_student, complexity_names:complexity_names, coupling_names:coupling_names, cohesion_names:cohesion_names, naming_names:naming_names, general_names:general_names});
                 }
             }
         }

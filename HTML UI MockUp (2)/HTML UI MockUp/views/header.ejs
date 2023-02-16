@@ -14,6 +14,7 @@
 
     function change_secret(val, class_list){
         let secret_list = document.getElementsByClassName("secret");
+        console.log(secret_list)
         let slider_list = document.getElementsByClassName('slider-value');
 
         let file_form_test = document.getElementsByClassName("file_form_test");
@@ -21,7 +22,7 @@
         let file_threshold_secret_list = document.getElementsByClassName("file_threshold");
 
         //console.log(file_threshold_secret_list)
-        let secret2_list = document.getElementsByClassName("secret2")
+        let secret2_list = document.getElementsByClassName("secret2");
         for(let i = 0; i < secret2_list.length; i++){
             if(secret2_list[i].classList.contains(class_list[0])){
                 secret2_list[i].setAttribute("value", val)
@@ -36,7 +37,8 @@
         // for(let i = 0; i < cma_threshold_update.length; i++){
         //     updateTextInput(cma_threshold_update[i])
         // }
-        console.log(slider_list.length)
+        //console.log(slider_list.length)
+        console.log(slider_list.length, secret_list.length)
         for(let i=0; i < slider_list.length; i++){
             if(slider_list[i].classList.contains(class_list[0])){
                 secret_list[i].value = val;
@@ -89,14 +91,14 @@
                         <%}%>
                     <% } %>
                 </select>
-                <% for (let i = 0; i < focus_file.QMA_names.length; i++) { %>
+                <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
                     <label>
                         <input class="secret" name='test' value=<%=threshold_list[i]%>>
                     </label>
                 <% } %>
-                <% for (let i = 0; i < focus_file.CMA_names.length; i++) { %>
+                <% for (let i = 0; i < focus_file.general_scores.length + focus_file.naming_scores.length; i++) { %>
                     <label>
-                        <input class="secret" name='test' value=<%=threshold_list[i+focus_file.QMA_names.length]%>>
+                        <input class="secret" name='test' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
                     </label>
                 <% } %>
             </form>
