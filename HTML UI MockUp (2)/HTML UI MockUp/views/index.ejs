@@ -122,9 +122,11 @@
     function change_test(value, class_list){
       //console.log(value);
       let color_bar_value_list = document.getElementsByClassName("color_bar_value");
+      //let secret5_list = document.getElementsByClassName("secret5");
       for (let i = 0; i < color_bar_value_list.length; i++) {
         if(color_bar_value_list[i].classList.contains(class_list[0])){
           color_bar_value_list[i].setAttribute("value", value)
+          //secret5_list[i].setAttribute("value", value)
           //console.log(secret2_list[i].value)
         }
       }

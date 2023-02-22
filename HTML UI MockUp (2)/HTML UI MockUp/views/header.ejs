@@ -14,18 +14,20 @@
 
     function change_secret(val, class_list){
         let secret_list = document.getElementsByClassName("secret");
-        console.log(secret_list)
         let slider_list = document.getElementsByClassName('slider-value');
 
         let file_form_test = document.getElementsByClassName("file_form_test");
-
         let file_threshold_secret_list = document.getElementsByClassName("file_threshold");
 
-        //console.log(file_threshold_secret_list)
         let secret2_list = document.getElementsByClassName("secret2");
+        let next_student_hidden_list = document.getElementsByClassName("next_student_hidden");
+        let prev_student_hidden_list = document.getElementsByClassName("prev_student_hidden");
         for(let i = 0; i < secret2_list.length; i++){
             if(secret2_list[i].classList.contains(class_list[0])){
                 secret2_list[i].setAttribute("value", val)
+                //next_student_hidden_list[i].setAttribute("value",val)
+                //prev_student_hidden_list[i].setAttribute("value",val)
+                console.log(val)
                 //console.log(secret2_list[i].value)
             }
         }
@@ -42,6 +44,8 @@
         for(let i=0; i < slider_list.length; i++){
             if(slider_list[i].classList.contains(class_list[0])){
                 secret_list[i].value = val;
+                next_student_hidden_list[i].setAttribute("value",val)
+                prev_student_hidden_list[i].setAttribute("value",val)
                 //console.log(secret_list[i].value, class_list[0]);
             }
         }
@@ -75,6 +79,16 @@
                 <label>
                     <input class="secret3" name="next_student" value="<%=prev_student.studentID%>">
                 </label>
+                <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
+                <label>
+                    <input class="prev_student_hidden" name='prev_student_hidden' value=<%=threshold_list[i]%>>
+                </label>
+                <% } %>
+                <% for (let i = 0; i < focus_file.general_scores.length + focus_file.naming_scores.length; i++) { %>
+                <label>
+                    <input class="prev_student_hidden" name='prev_student_hidden' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                </label>
+                <% } %>
                 <button id="prev-student-button" class="Button Button--icon-action gradebookMoveToNext prev" aria-label="Previous" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
@@ -111,6 +125,16 @@
                         <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
                     </svg>
                 </button>
+                <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
+                <label>
+                    <input class="next_student_hidden" name='next_student_hidden' value=<%=threshold_list[i]%>>
+                </label>
+                <% } %>
+                <% for (let i = 0; i < focus_file.general_scores.length + focus_file.naming_scores.length; i++) { %>
+                <label>
+                    <input class="next_student_hidden" name='next_student_hidden' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                </label>
+                <% } %>
             </form>
         </div>
     </div>
