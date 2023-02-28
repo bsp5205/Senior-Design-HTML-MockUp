@@ -112,7 +112,11 @@ body {
     align-items: center;
     flex-wrap: nowrap;
     background: rgba(57,75,88,255);
-    padding: 5px;
+    padding: 7px;
+}
+
+.main-page{
+
 }
 
 .subheadContent--flex-start {
@@ -257,13 +261,16 @@ form {
 .grid-container {
     display: grid;
     gap: 0.25%;
-    padding-right: 3.25%;
     grid-template-columns: repeat(6,minmax(0,1fr));
-    grid-template-rows: 50vh 50vh;
+    grid-template-rows: 45vh 45vh;
     grid-template-areas:
             'code code code code qma_score qma_score file'
-            'code code code code cma_score cma_score file';
+            'code code code code qma_score qma_score file';
     background-color: white;
+    padding-right: 3.5%;
+    padding-top: 0.25%;
+    padding-bottom: 0.25%;
+
 }
 .item1 {
     grid-area: code;
@@ -277,6 +284,8 @@ form {
     border: #c7cdd1 solid;
     overflow: auto;
     border-radius: 10px;
+    padding-top: 2%;
+    padding-left: 2%;
 }
 .item3 {
     grid-area: cma_score;
@@ -290,6 +299,9 @@ form {
     background: #f5f5f5;
     border: #c7cdd1 solid;
     border-radius: 10px;
+
+    padding-top: 2%;
+    padding-left: 2%;
 }
 
 .item5 {
@@ -490,11 +502,10 @@ div[role="progressbar"]::before {
 
 #submission-history{
     padding-bottom: 10%;
-    padding-top: 2%;
 }
 
 #submission-files{
-    padding-bottom: 185%;
+    padding-bottom: 150%;
 }
 
 .summary-container{
