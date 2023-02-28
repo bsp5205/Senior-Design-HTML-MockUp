@@ -21,8 +21,8 @@ th{
 
 #outer-grid {
   display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 2fr 2fr 2fr 2fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 4px;
   padding-top: 1px;
 }
@@ -33,7 +33,6 @@ th{
 #inner-grid {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
   grid-gap: 4px;
 }
 #inner-grid > div {
@@ -94,7 +93,9 @@ th {
   opacity: 0.7;
   -webkit-transition: .2s;
   transition: opacity .2s;
-  margin: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 5%;
 }
 
 #rangeInput::-webkit-slider-thumb {
@@ -457,4 +458,8 @@ input[type='range']::-webkit-slider-thumb {
 }
 .prev_student_hidden{
   display: none;
+}
+body{
+  padding: 0;
+  margin: 0;
 }

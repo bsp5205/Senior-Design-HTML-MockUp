@@ -15,17 +15,14 @@
       document.getElementById("cma_form").style.display = "block";
       document.getElementById("outer-grid").style.display = "none";
     }
-
     function close_cma_form() {
       document.getElementById("cma_form").style.display = "none";
       document.getElementById("outer-grid").style.display = "grid";
     }
-
     function open_qma_form() {
       document.getElementById("qma_form").style.display = "block";
       document.getElementById("outer-grid").style.display = "none";
     }
-
     function close_qma_form() {
       document.getElementById("qma_form").style.display = "none";
       document.getElementById("outer-grid").style.display = "grid";
@@ -317,13 +314,13 @@
     </div>
     <div id="outer-grid">
       <div id="inner-grid">
-        <div>
+        <div class="code_display">
           <p><pre><%=focus_file.code%></pre></p>
         </div>
       </div>
       <div id="inner-grid">
         <div>
-          <table style="height: 100%;">
+          <table style="height: 100%">
             <tr>
               <th colspan="2">Quality Metric Analysis (QMA)</th>
             </tr>
@@ -366,7 +363,7 @@
             <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
               <tr>
                 <td>
-                    <p><%= cohesion_names[i] %></p>
+                  <p><%= cohesion_names[i] %></p>
                 </td>
                 <td>
                   <input id="itr" type="range" min="0" max="100" value=<%= focus_file.cohesion_scores[i]%> name="rangeInput2" class="slider2 test color-QMA <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%>">
@@ -376,7 +373,7 @@
           </table>
         </div>
         <div>
-          <table style="height: 100%;">
+          <table style="height: 100%">
             <tr>
               <th colspan="2">Convention Metric Analysis (CMA)</th>
             </tr>
@@ -419,7 +416,7 @@
       </div>
       <div id="inner-grid">
         <div>
-          <table>
+          <table style="height: 100%">
             <tr>
               <th colspan="2">QMA Threshold</th>
             </tr>
@@ -431,7 +428,7 @@
             <% for (let i = 0; i < focus_file.complexity_scores.length; i++) { %>
               <tr>
                 <td>
-                    <p><%= complexity_names[i] %></p>
+                  <p><%= complexity_names[i] %></p>
                 </td>
                 <td>
                   <div class="slider qma-threshold-update">
@@ -481,7 +478,7 @@
           </table>
         </div>
         <div>
-          <table>
+          <table style="height: 100%">
             <tr>
               <th colspan="2">CMA Threshold</th>
             </tr>
