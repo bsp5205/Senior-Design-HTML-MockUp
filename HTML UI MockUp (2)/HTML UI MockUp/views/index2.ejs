@@ -7,7 +7,25 @@
     <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
 </head>
 <script>
-    var base_scores = []
+    var base_scores = [];
+
+    function open_cma_form() {
+        document.getElementById("cma_form").style.display = "block";
+        document.getElementById("main-page").style.display = "none";
+    }
+    function close_cma_form() {
+        document.getElementById("cma_form").style.display = "none";
+        document.getElementById("main-page").style.display = "block";
+    }
+    function open_qma_form() {
+        document.getElementById("qma_form").style.display = "block";
+        document.getElementById("main-page").style.display = "none";
+    }
+    function close_qma_form() {
+        document.getElementById("qma_form").style.display = "none";
+        document.getElementById("main-page").style.display = "block";
+    }
+
     function menu() {
         document.getElementById("myDropdown").classList.toggle("show");
     }
@@ -737,6 +755,12 @@
         var general_scores = JSON.parse('<%- JSON.stringify(focus_file.general_scores) %>');
 
         base_scores = base_scores.concat(complexity_scores, coupling_scores, cohesion_scores, naming_scores, general_scores);
+
+        const score_list= document.querySelectorAll('td[class=score]')
+        for (let i = 0; i < score_list.length; i++) {
+            //console.log(score_list[i].innerHTML)
+            score_list[i].style.setProperty('background-color', `hsl(${score_list[i].innerHTML}, 100%, 50%)`)
+        }
     }
 </script>
 <body onload="loadFunction()">
@@ -828,272 +852,430 @@
             </div>
         </div>
     </div>
-    <div class="menu">
-        <div class="title">THRESHOLDS</div>
-        <ul class="nav">
-            <li style="padding-top: 5%;"><div><span><b>QMA Thresholds</b></span></div></li>
-            <li>
-                <table class="threshold-table">
-                <tr>
-                    <td class="threshold-table-tab">
-                        <b>Complexity</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.complexity_scores.length; i++) { %>
-                    <tr>
-                        <td class="threshold-table-content">
-                            <%= complexity_names[i] %>
-                        </td>
-                        <td>
-                            <div class="slider qma-threshold-update">
-                                <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1)%> min="0" max="100" value=<%=threshold_list[i]%> onchange="updateTextInput(this.parentNode);">
-                                <input type="text" value=<%=threshold_list[i]%> id="textInput" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
-                            </div>
-                        </td>
-                    </tr>
-                <% } %>
-
-                <tr>
-                    <td class="threshold-table-tab">
-                        <b>Coupling</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.coupling_scores.length; i++) { %>
-                    <tr>
-                        <td class="threshold-table-content" style="width: 40%;">
-                            <%= coupling_names[i] %>
-                        </td>
-                        <td>
-                            <div class="slider qma-threshold-update">
-                                <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length]%> onchange="updateTextInput(this.parentNode);">
-                                <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length)%>" onchange="updateSlider(this.parentNode);">
-                            </div>
-                        </td>
-                    </tr>
-                <% } %>
-
-                <tr>
-                    <td class="threshold-table-tab">
-                        <b>Cohesion</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
-                    <tr>
-                        <td class="threshold-table-content" style="width: 40%;">
-                            <%= cohesion_names[i] %>
-                        </td>
-                        <td>
-                            <div class="slider qma-threshold-update">
-                                <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length]%> onchange="updateTextInput(this.parentNode);">
-                                <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%>" onchange="updateSlider(this.parentNode);">
-                            </div>
-                        </td>
-                        </td>
-                    </tr>
-                <% } %>
-            </table>
-            </li>
-            <li><div><span><b>CMA Thresholds</b></span></div></li>
-            <li style="padding-bottom: 5%;">
-                <table class="threshold-table">
-                    <tr>
-                        <td class="threshold-table-tab">
-                            <b>General</b>
-                        </td>
-                    </tr>
-                    <% for (let i = 0; i < focus_file.general_scores.length; i++) { %>
+    <div class="cma-popup" id="cma_form">
+        <div id="outer-grid-summary">
+            <div id="inner-grid-summary">
+                <div class="summary-table">
+                    <table>
                         <tr>
-                            <td class="threshold-table-content" style="width: 40%;">
-                                <%= general_names[i] %>
+                            <th colspan="7">CMA Metric Analysis Report</th>
+                        </tr>
+
+                        <tr>
+                            <th colspan="3"></th>
+                            <th colspan="2">General</th>
+                            <th colspan="3">Naming Conventions</th>
+                        </tr>
+
+                        <tr>
+                            <td>Student Name</td>
+                            <td>Student ID</td>
+                            <td>File</td>
+                            <td>Comment Percentage (CP)</td>
+                            <td>Token Count (TC)</td>
+                            <td>Class</td>
+                            <td>Method</td>
+                            <td>Variable</td>
+                        </tr>
+                        <% for (let i = 0; i < student_list.length; i++) { %>
+                            <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
+                            <tr>
+                                <%if(j == 0){%>
+                                    <td>
+                                        <%= student_list[i].name %>
+                                    </td>
+                                    <td>
+                                        <%= student_list[i].studentID %>
+                                    </td>
+                                <%}else{%>
+                                    <td></td>
+                                    <td></td>
+                                <%}%>
+                                <td>
+                                    <%= student_list[i].submission.file_list[j].name%>
+                                </td>
+                                <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
+                                <td class="score">
+                                    <%=student_list[i].submission.file_list[j].general_scores[k]%>
+                                </td>
+                                <% } %>
+                                <% for (let k = 0; k < student_list[i].submission.file_list[j].naming_scores.length; k++) { %>
+                                <td class="score">
+                                    <%=student_list[i].submission.file_list[j].naming_scores[k]%>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <% } %>
+                        <% } %>
+                    </table>
+                </div>
+            </div>
+            <div id="inner-grid-summary">
+                <div>
+                    <table>
+                        <tr>
+                            <th colspan="2">CMA Summary Observations</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn cancel ui-button-close" onclick="close_cma_form()">Close Summary</button>
+    </div>
+    <div class="qma-popup" id="qma_form">
+        <div id="outer-grid-summary">
+            <div id="inner-grid-summary">
+                <div class="summary-table">
+                    <table>
+                        <tr>
+                            <th colspan="4">QMA Metric Analysis Report</th>
+                        </tr>
+
+                        <tr>
+                            <th colspan="3"></th>
+                            <th colspan="4">Complexity</th>
+                            <th colspan="2">Coupling</th>
+                            <th colspan="3">Cohesion</th>
+                        </tr>
+
+                        <tr>
+                            <td>Student Name</td>
+                            <td>Student ID</td>
+                            <td>File</td>
+                            <td>Cyclomatic Complexity (CC)</td>
+                            <td>Lines of Code (LOC)</td>
+                            <td>Weighted Methods per Class (WMC)</td>
+                            <td>ABC</td>
+                            <td>Coupling Factor (COF)</td>
+                            <td>Coupling between objects (CBO)</td>
+                            <td>Depth of Inheritance (DIT)</td>
+                            <td>Method Hiding Factor (MHF)</td>
+                            <td>Attribute Hiding Factor (AHF)</td>
+                        </tr>
+                        <% for (let i = 0; i < student_list.length; i++) { %>
+                            <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
+                            <tr>
+                                <%if(j == 0){%>
+                                    <td>
+                                        <%= student_list[i].name %>
+                                    </td>
+                                    <td>
+                                        <%= student_list[i].studentID %>
+                                    </td>
+                                <%}else{%>
+                                    <td></td>
+                                    <td></td>
+                                <%}%>
+                                <td>
+                                    <%= student_list[i].submission.file_list[j].name%>
+                                </td>
+                                <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
+                                <td class="score">
+                                    <%=student_list[i].submission.file_list[j].complexity_scores[k]%>
+                                </td>
+                                <% } %>
+                                <% for (let k = 0; k < student_list[i].submission.file_list[j].coupling_scores.length; k++) { %>
+                                <td class="score">
+                                    <%=student_list[i].submission.file_list[j].coupling_scores[k]%>
+                                </td>
+                                <% } %>
+                                <% for (let k = 0; k < student_list[i].submission.file_list[j].cohesion_scores.length; k++) { %>
+                                <td class="score">
+                                    <%=student_list[i].submission.file_list[j].cohesion_scores[k]%>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <% } %>
+                        <% } %>
+                    </table>
+                </div>
+            </div>
+            <div id="inner-grid-summary">
+                <div>
+                    <table>
+                        <tr>
+                            <th colspan="2">QMA Summary Observations</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn cancel ui-button-close" onclick="close_qma_form()">Close Summary</button>
+    </div>
+    <div id="main-page">
+        <div class="menu">
+            <div class="title">THRESHOLDS</div>
+            <ul class="nav">
+                <li style="padding-top: 5%;"><div><span><b>QMA Thresholds</b></span></div></li>
+                <li>
+                    <table class="threshold-table">
+                        <tr>
+                            <td class="threshold-table-tab">
+                                <b>Complexity</b>
                             </td>
-                            <td>
-                                <div class="slider qma-threshold-update">
-                                    <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length]%> onchange="updateTextInput(this.parentNode);">
-                                    <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length)%>" onchange="updateSlider(this.parentNode);">
-                                </div>
+                        </tr>
+                        <% for (let i = 0; i < focus_file.complexity_scores.length; i++) { %>
+                            <tr>
+                                <td class="threshold-table-content">
+                                    <%= complexity_names[i] %>
+                                </td>
+                                <td>
+                                    <div class="slider qma-threshold-update">
+                                        <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1)%> min="0" max="100" value=<%=threshold_list[i]%> onchange="updateTextInput(this.parentNode);">
+                                        <input type="text" value=<%=threshold_list[i]%> id="textInput" class="slider-value <%='s'+(i+1)%>" onchange="updateSlider(this.parentNode);">
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+
+                        <tr>
+                            <td class="threshold-table-tab">
+                                <b>Coupling</b>
+                            </td>
+                        </tr>
+                        <% for (let i = 0; i < focus_file.coupling_scores.length; i++) { %>
+                            <tr>
+                                <td class="threshold-table-content" style="width: 40%;">
+                                    <%= coupling_names[i] %>
+                                </td>
+                                <td>
+                                    <div class="slider qma-threshold-update">
+                                        <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length]%> onchange="updateTextInput(this.parentNode);">
+                                        <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length)%>" onchange="updateSlider(this.parentNode);">
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+
+                        <tr>
+                            <td class="threshold-table-tab">
+                                <b>Cohesion</b>
+                            </td>
+                        </tr>
+                        <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
+                            <tr>
+                                <td class="threshold-table-content" style="width: 40%;">
+                                    <%= cohesion_names[i] %>
+                                </td>
+                                <td>
+                                    <div class="slider qma-threshold-update">
+                                        <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length]%> onchange="updateTextInput(this.parentNode);">
+                                        <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%>" onchange="updateSlider(this.parentNode);">
+                                    </div>
+                                </td>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </table>
+                </li>
+                <li><div><span><b>CMA Thresholds</b></span></div></li>
+                <li style="padding-bottom: 5%;">
+                    <table class="threshold-table">
+                        <tr>
+                            <td class="threshold-table-tab">
+                                <b>General</b>
+                            </td>
+                        </tr>
+                        <% for (let i = 0; i < focus_file.general_scores.length; i++) { %>
+                            <tr>
+                                <td class="threshold-table-content" style="width: 40%;">
+                                    <%= general_names[i] %>
+                                </td>
+                                <td>
+                                    <div class="slider qma-threshold-update">
+                                        <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length]%> onchange="updateTextInput(this.parentNode);">
+                                        <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length)%>" onchange="updateSlider(this.parentNode);">
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                        <tr>
+                            <td class="threshold-table-tab">
+                                <b>Naming</b>
+                            </td>
+                        </tr>
+                        <% for (let i = 0; i < focus_file.naming_scores.length; i++) { %>
+                            <tr>
+                                <td class="threshold-table-content" style="width: 40%;">
+                                    <%= naming_names[i] %>
+                                </td>
+                                <td>
+                                    <div class="slider qma-threshold-update">
+                                        <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length]%> onchange="updateTextInput(this.parentNode);">
+                                        <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length)%>" onchange="updateSlider(this.parentNode);">
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </table>
+                </li>
+            </ul>
+        </div>
+        <div class="grid-container">
+            <div class="item1" style="background-color: #f5f5f5">
+                <pre><code data-language="Java"><%=focus_file.code%></code></pre>
+            </div>
+            <div class="item2">
+                <div><span class="grid-title">Quality Metric Analysis (QMA)</span></div>
+                <table class="qma-score-table">
+                    <tr>
+                        <td>
+                            <b>Complexity</b>
+                        </td>
+                    </tr>
+                    <% for (let i = 0; i < focus_file.complexity_scores.length; i++) { %>
+                        <tr>
+                            <td class="table-title"><%= complexity_names[i] %>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                </svg>
+                                <p class="metric-info-popup"></p>
+                            </td>
+                            <td class="progress-bar-cont">
+                                <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.complexity_scores[i]%>" class="color-circle <%='s'+(i+1)%>"></div>
                             </td>
                         </tr>
                     <% } %>
+
                     <tr>
-                        <td class="threshold-table-tab">
+                        <td>
+                            <b>Coupling</b>
+                        </td>
+                    </tr>
+                    <% for (let i = 0; i < focus_file.coupling_scores.length; i++) { %>
+                        <tr>
+                            <td class="table-title"><%= coupling_names[i] %>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                </svg>
+                                <p class="metric-info-popup"></p>
+                            </td>
+                            <td>
+                                <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.coupling_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length)%>"></div>
+                            </td>
+                        </tr>
+                    <% } %>
+
+                    <tr>
+                        <td>
+                            <b>Cohesion</b>
+                        </td>
+                    </tr>
+                    <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
+                        <tr>
+                            <td class="table-title"><%= cohesion_names[i] %>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                </svg>
+                                <p class="metric-info-popup"></p>
+                            </td>
+                            <td>
+                                <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.cohesion_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%>"></div>
+                            </td>
+                        </tr>
+                    <% } %>
+                </table>
+            </div>
+            <div class="item3">
+                <div><span class="grid-title">Convention Metric Analysis (CMA)</span></div>
+                <table class="cma-score-table">
+                    <tr>
+                        <td>
+                            <b>General</b>
+                        </td>
+                    </tr>
+                    <% for (let i = 0; i < general_names.length; i++) { %>
+                        <tr>
+                            <td class="table-title"><%= general_names[i] %>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                </svg>
+                                <p class="metric-info-popup"></p>
+                            </td>
+                            <td>
+                                <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.general_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length)%>"></div>
+                            </td>
+                        </tr>
+                    <% } %>
+
+                    <tr>
+                        <td>
                             <b>Naming</b>
                         </td>
                     </tr>
                     <% for (let i = 0; i < focus_file.naming_scores.length; i++) { %>
                         <tr>
-                            <td class="threshold-table-content" style="width: 40%;">
-                                <%= naming_names[i] %>
+                            <td class="table-title"><%= naming_names[i] %>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                </svg>
+                                <p class="metric-info-popup"></p>
                             </td>
                             <td>
-                                <div class="slider qma-threshold-update">
-                                    <input type="range" id="rangeInput" name="rangeInput" class=<%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length)%> min="0" max="100" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length]%> onchange="updateTextInput(this.parentNode);">
-                                    <input type="text" value=<%=threshold_list[i+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length]%> id="textInput" class="slider-value <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length)%>" onchange="updateSlider(this.parentNode);">
-                                </div>
+                                <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.naming_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length)%>"></div>
                             </td>
                         </tr>
                     <% } %>
                 </table>
-            </li>
-        </ul>
-    </div>
-    <div class="grid-container">
-        <div class="item1" style="background-color: #f5f5f5">
-            <pre><code data-language="Java"><%=focus_file.code%></code></pre>
-        </div>
-        <div class="item2">
-            <div><span class="grid-title">Quality Metric Analysis (QMA)</span></div>
-            <table class="qma-score-table">
-                <tr>
-                    <td>
-                        <b>Complexity</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.complexity_scores.length; i++) { %>
-                    <tr>
-                        <td class="table-title"><%= complexity_names[i] %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                            </svg>
-                            <p class="metric-info-popup"></p>
-                        </td>
-                        <td class="progress-bar-cont">
-                            <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.complexity_scores[i]%>" class="color-circle <%='s'+(i+1)%>"></div>
-                        </td>
-                    </tr>
-                <% } %>
 
-                <tr>
-                    <td>
-                        <b>Coupling</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.coupling_scores.length; i++) { %>
-                    <tr>
-                        <td class="table-title"><%= coupling_names[i] %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                            </svg>
-                            <p class="metric-info-popup"></p>
-                        </td>
-                        <td>
-                            <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.coupling_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length)%>"></div>
-                        </td>
-                    </tr>
-                <% } %>
+            </div>
+            <div class="item4">
+                <div>
+                    <div id="submission-details">
+                        <div id="submission-history">
+                            <label><b>Submitted:</b></label>
+                            <%= selected_student.submission.submission_time %>
+                        </div>
+                        <div id="submission-files">
+                            <label><b>Submitted Files:</b></label>
+                            <span>(Click to load)</span>
+                            <div id="submitted-file-list">
+                                <% for (let i = 0; i < selected_student.submission.file_list.length; i++) { %>
+                                <div class="submission-file">
+                                    <div class="container">
+                                        <form action="http://localhost:3000/change_file" method="post" id="file_form" class="file_form_test">
+                                            <button class="submission_button" type="submit" name=<%=selected_student.submission.file_list[i].id + '-' +selected_student.studentID%>><%= selected_student.submission.file_list[i].name %></button>
+                                            <label>
+                                                <input class="change_file_secret" name='student_id' value=<%=selected_student.studentID%>>
+                                            </label>
+                                            <label>
+                                                <input class="change_file_secret" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
+                                            </label>
+                                            <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
+                                            <label>
+                                                <input class="<%='s'+(i+1)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i]%>>
+                                            </label>
+                                            <% } %>
 
-                <tr>
-                    <td>
-                        <b>Cohesion</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
-                    <tr>
-                        <td class="table-title"><%= cohesion_names[i] %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                            </svg>
-                            <p class="metric-info-popup"></p>
-                        </td>
-                        <td>
-                            <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.cohesion_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%>"></div>
-                        </td>
-                    </tr>
-                <% } %>
-            </table>
-        </div>
-        <div class="item3">
-            <div><span class="grid-title">Convention Metric Analysis (CMA)</span></div>
-            <table class="cma-score-table">
-                <tr>
-                    <td>
-                        <b>General</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < general_names.length; i++) { %>
-                    <tr>
-                        <td class="table-title"><%= general_names[i] %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                            </svg>
-                            <p class="metric-info-popup"></p>
-                        </td>
-                        <td>
-                            <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.general_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length)%>"></div>
-                        </td>
-                    </tr>
-                <% } %>
-
-                <tr>
-                    <td>
-                        <b>Naming</b>
-                    </td>
-                </tr>
-                <% for (let i = 0; i < focus_file.naming_scores.length; i++) { %>
-                    <tr>
-                        <td class="table-title"><%= naming_names[i] %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                            </svg>
-                            <p class="metric-info-popup"></p>
-                        </td>
-                        <td>
-                            <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.naming_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length+focus_file.cohesion_scores.length+focus_file.general_scores.length)%>"></div>
-                        </td>
-                    </tr>
-                <% } %>
-            </table>
-
-        </div>
-        <div class="item4">
-            <div>
-                <div id="submission-details">
-                    <div id="submission-history">
-                        <label><b>Submitted:</b></label>
-                        <%= selected_student.submission.submission_time %>
-                    </div>
-                    <div id="submission-files">
-                        <label><b>Submitted Files:</b></label>
-                        <span>(Click to load)</span>
-                        <div id="submitted-file-list">
-                            <% for (let i = 0; i < selected_student.submission.file_list.length; i++) { %>
-                            <div class="submission-file">
-                                <div class="container">
-                                    <form action="http://localhost:3000/change_file" method="post" id="file_form" class="file_form_test">
-                                        <button class="submission_button" type="submit" name=<%=selected_student.submission.file_list[i].id + '-' +selected_student.studentID%>><%= selected_student.submission.file_list[i].name %></button>
-                                        <label>
-                                            <input class="change_file_secret" name='student_id' value=<%=selected_student.studentID%>>
-                                        </label>
-                                        <label>
-                                            <input class="change_file_secret" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
-                                        </label>
-                                        <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
-                                        <label>
-                                            <input class="<%='s'+(i+1)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i]%>>
-                                        </label>
-                                        <% } %>
-
-                                        <% for (let i = 0; i < focus_file.naming_scores.length + focus_file.general_scores.length; i++) { %>
-                                        <label>
-                                            <input class="<%='s'+(i+1+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
-                                        </label>
-                                        <% } %>
-                                        <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
+                                            <% for (let i = 0; i < focus_file.naming_scores.length + focus_file.general_scores.length; i++) { %>
+                                            <label>
+                                                <input class="<%='s'+(i+1+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                                            </label>
+                                            <% } %>
+                                            <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
                                             <span class="screenreader-only">
                                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                                               </svg>
                                             </span>
-                                        </a>
-                                    </form>
+                                            </a>
+                                        </form>
+                                    </div>
                                 </div>
+                                <% } %>
                             </div>
-                            <% } %>
+                        </div>
+                    </div>
+                    <div class="summary-container">
+                        <div class="summary">
+                            <button class="open-button ui-button stacked" onclick="open_qma_form()">QMA Summary</button>
+                            <button class="open-button ui-button stacked" onclick="open_cma_form()">CMA Summary</button>
                         </div>
                     </div>
                 </div>

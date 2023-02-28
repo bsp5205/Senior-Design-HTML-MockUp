@@ -416,9 +416,9 @@ student_3_submission.file_list.push(file_32);
 
 student_3.submission = student_3_submission;
 
-student_list.push(student_3)
+student_list.push(student_3);
 
-let t = [50,50,50,50,50,50,50,50,50,50,50,50,50,50]
+let t = [50,50,50,50,50,50,50,50,50,50,50,50,50,50];
 
 app.get("/", function(req,res){
     let prev_student = student_list[0]
