@@ -763,6 +763,102 @@
         }
     }
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        //control is here
+        let larguraGraficoFora = 400;
+        let alturaGraficoFora = 400;
+        let furoGraficoFora = 0.8;
+
+        var data = google.visualization.arrayToDataTable([
+            ['Sabor de Pizza', 'Quantidade'],
+            ['portuguesa',     30],
+            ['frango com catupiry',     30],
+            ['calabresa',     30],
+            ['alguma doce',     30],
+        ]);
+
+        var options = {
+            width: larguraGraficoFora,
+            height: alturaGraficoFora,
+            chartArea:{left:0,top:0,width:'100%',height:'100%'},
+            pieHole: furoGraficoFora,
+            legend: 'none'
+        };
+        console.log(larguraGraficoFora);
+        var chart = new google.visualization.PieChart(document.getElementById('donut_1'));
+        chart.draw(data, options);
+
+        var data2 = google.visualization.arrayToDataTable([
+            ['Effort', 'Amount given'],
+            ['c#',     30],
+            ['python',     30],
+            ['javascript',     30],
+            ['sql server',     30],
+            ['php',     30],
+        ]);
+
+        var options2 = {
+            legend:'none',
+            width: larguraGraficoFora*furoGraficoFora,
+            height: alturaGraficoFora*furoGraficoFora,
+            chartArea:{left:0,top:0,width:'100%',height:'100%'},
+            backgroundColor: 'transparent',
+            legend: 'none',
+            pieHole: furoGraficoFora,
+        };
+        console.log(larguraGraficoFora*furoGraficoFora);
+        var chart2 = new google.visualization.PieChart(document.getElementById('donut_2'));
+        chart2.draw(data2, options2);
+
+        var data3 = google.visualization.arrayToDataTable([
+            ['Effort', 'Amount given'],
+            ['c#',     30],
+            ['python',     30],
+            ['javascript',     30],
+            ['sql server',     30],
+            ['php',     30],
+        ]);
+
+        var options3 = {
+            legend:'none',
+            width: larguraGraficoFora*furoGraficoFora*furoGraficoFora,
+            height: alturaGraficoFora*furoGraficoFora*furoGraficoFora,
+            chartArea:{left:0,top:0,width:'100%',height:'100%'},
+            backgroundColor: 'transparent',
+            legend: 'none',
+            pieHole: furoGraficoFora,
+        };
+
+        console.log(larguraGraficoFora*furoGraficoFora*furoGraficoFora)
+
+        var chart3 = new google.visualization.PieChart(document.getElementById('donut_3'));
+        chart3.draw(data3, options3);
+
+        ajustePosicaoPieCentral(larguraGraficoFora, alturaGraficoFora, furoGraficoFora);
+    }
+
+
+    function ajustePosicaoPieCentral(largura, altura, furo){
+
+        yt = altura*(1+furo)/2.0;
+        xt = largura*(1-furo)/2.0;
+        console.log(xt,yt);
+        var css = document.getElementById('donut_2');
+        css.style.transform = "translate("+xt+"px, -"+yt+"px)";
+
+        yt2 = altura*(1+furo**2)/2.0;
+        xt2 = largura*(1-furo**2)/2.0;
+        console.log(xt2,yt2);
+        var css2 = document.getElementById('donut_3');
+        css2.style.transform = "translate("+xt2+"px, -"+(288+yt)+"px)";
+    }
+</script>
 <body onload="loadFunction()">
     <div id="gradebook_header" class="subheadContent">
         <div class="subheadContent subheadContent--flex-start">
@@ -891,7 +987,7 @@
                                     <td></td>
                                     <td></td>
                                 <%}%>
-                                <td>
+                                <td class="cutoff">
                                     <%= student_list[i].submission.file_list[j].name%>
                                 </td>
                                 <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
@@ -956,7 +1052,7 @@
                             <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
                             <tr>
                                 <%if(j == 0){%>
-                                    <td>
+                                    <td class="cutoff">
                                         <%= student_list[i].name %>
                                     </td>
                                     <td>
@@ -966,7 +1062,7 @@
                                     <td></td>
                                     <td></td>
                                 <%}%>
-                                <td>
+                                <td class="cutoff">
                                     <%= student_list[i].submission.file_list[j].name%>
                                 </td>
                                 <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
@@ -1004,7 +1100,9 @@
     </div>
     <div id="main-page">
         <div class="menu">
-            <div class="title">THRESHOLDS</div>
+            <div class="title">THRESHOLDS <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg></div>
             <ul class="nav">
                 <li style="padding-top: 5%;"><div><span><b>QMA Thresholds</b></span></div></li>
                 <li>
@@ -1271,8 +1369,8 @@
                     </div>
                     <div class="summary-container">
                         <div class="summary">
-                            <button class="open-button ui-button stacked" onclick="open_qma_form()">QMA Summary</button>
-                            <button class="open-button ui-button stacked" onclick="open_cma_form()">CMA Summary</button>
+                            <button class="ui-button stacked" onclick="open_qma_form()">QMA Summary</button>
+                            <button class="ui-button stacked" onclick="open_cma_form()">CMA Summary</button>
                         </div>
                     </div>
                 </div>
