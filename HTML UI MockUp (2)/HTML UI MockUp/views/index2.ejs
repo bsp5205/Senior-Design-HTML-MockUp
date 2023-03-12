@@ -771,9 +771,10 @@
     function drawChart() {
 
         //control is here
-        let larguraGraficoFora = 400;
-        let alturaGraficoFora = 400;
-        let furoGraficoFora = 0.8;
+        let widthBase = 400;
+        let heightBase = 400;
+        let scale = 0.8;
+        let thickness = 80;
 
         var data = google.visualization.arrayToDataTable([
             ['Sabor de Pizza', 'Quantidade'],
@@ -784,82 +785,128 @@
         ]);
 
         var options = {
-            width: larguraGraficoFora,
-            height: alturaGraficoFora,
+            width: widthBase,
+            height: heightBase,
             chartArea:{left:0,top:0,width:'100%',height:'100%'},
-            pieHole: furoGraficoFora,
-            legend: 'none'
+            legend: 'none',
+            pieHole: (widthBase-80)/widthBase
         };
-        console.log(larguraGraficoFora);
+
         var chart = new google.visualization.PieChart(document.getElementById('donut_1'));
         chart.draw(data, options);
 
         var data2 = google.visualization.arrayToDataTable([
-            ['Effort', 'Amount given'],
-            ['c#',     30],
-            ['python',     30],
-            ['javascript',     30],
-            ['sql server',     30],
-            ['php',     30],
+            ['Sabor de Pizza', 'Quantidade'],
+            ['portuguesa',     30],
+            ['frango com catupiry',     30],
+            ['calabresa',     30],
+            ['alguma doce',     30],
         ]);
 
         var options2 = {
-            legend:'none',
-            width: larguraGraficoFora*furoGraficoFora,
-            height: alturaGraficoFora*furoGraficoFora,
+            width: widthBase-80,
+            height: heightBase-80,
             chartArea:{left:0,top:0,width:'100%',height:'100%'},
-            backgroundColor: 'transparent',
             legend: 'none',
-            pieHole: furoGraficoFora,
+            backgroundColor: 'transparent',
+            pieHole: (widthBase-160)/(widthBase-80)
         };
-        console.log(larguraGraficoFora*furoGraficoFora);
+
         var chart2 = new google.visualization.PieChart(document.getElementById('donut_2'));
         chart2.draw(data2, options2);
 
         var data3 = google.visualization.arrayToDataTable([
-            ['Effort', 'Amount given'],
-            ['c#',     30],
-            ['python',     30],
-            ['javascript',     30],
-            ['sql server',     30],
-            ['php',     30],
+            ['Sabor de Pizza', 'Quantidade'],
+            ['portuguesa',     30],
+            ['frango com catupiry',     30],
+            ['calabresa',     30],
+            ['alguma doce',     30],
         ]);
 
         var options3 = {
-            legend:'none',
-            width: larguraGraficoFora*furoGraficoFora*furoGraficoFora,
-            height: alturaGraficoFora*furoGraficoFora*furoGraficoFora,
+            width: widthBase-160,
+            height: heightBase-160,
             chartArea:{left:0,top:0,width:'100%',height:'100%'},
-            backgroundColor: 'transparent',
             legend: 'none',
-            pieHole: furoGraficoFora,
+            backgroundColor: 'transparent',
+            pieHole: (widthBase-240)/(widthBase-160)
         };
-
-        console.log(larguraGraficoFora*furoGraficoFora*furoGraficoFora)
 
         var chart3 = new google.visualization.PieChart(document.getElementById('donut_3'));
         chart3.draw(data3, options3);
 
-        ajustePosicaoPieCentral(larguraGraficoFora, alturaGraficoFora, furoGraficoFora);
+        // for (let num_rings = 0; num_rings < 2; num_rings++) {
+        //
+        //     var data = google.visualization.arrayToDataTable([
+        //         ['Sabor de Pizza', 'Quantidade'],
+        //         ['portuguesa',     30],
+        //         ['frango com catupiry',     30],
+        //         ['calabresa',     30],
+        //         ['alguma doce',     30],
+        //     ]);
+        //
+        //     var options = {
+        //         width: widthBase-(num_rings*thickness),
+        //         height: heightBase-(num_rings*thickness),
+        //         chartArea:{left:0,top:0,width:'100%',height:'100%'},
+        //         legend: 'none',
+        //         backgroundColor: 'transparent',
+        //         pieSliceText: 'label',
+        //         pieHole:(widthBase-(num_rings*2*thickness))/(widthBase-(num_rings*thickness)),
+        //         tooltip:{trigger:'selection'},
+        //     };
+        //     console.log((widthBase-(num_rings*2*thickness))/(widthBase-(num_rings*thickness)))
+        //     var chart = new google.visualization.PieChart(document.getElementById('donut_'+num_rings));
+        //     chart.draw(data, options);
+        //
+        // }
+
+
+        let circle_list = ['donut_2', 'donut_3'];
+        shiftCircles(circle_list, widthBase, heightBase, thickness);
     }
 
-
-    function ajustePosicaoPieCentral(largura, altura, furo){
-
-        yt = altura*(1+furo)/2.0;
-        xt = largura*(1-furo)/2.0;
-        console.log(xt,yt);
-        var css = document.getElementById('donut_2');
-        css.style.transform = "translate("+xt+"px, -"+yt+"px)";
-
-        yt2 = altura*(1+furo**2)/2.0;
-        xt2 = largura*(1-furo**2)/2.0;
-        console.log(xt2,yt2);
-        var css2 = document.getElementById('donut_3');
-        css2.style.transform = "translate("+xt2+"px, -"+(288+yt)+"px)";
+    function shiftCircles(circle_list, widthBase, heightBase, scale){
+        // let css = document.getElementById(circle_list[0]);
+        // css.style.transform = "translate("+0+"px, -"+375+"px)";
+        // css = document.getElementById(circle_list[1]);
+        // css.style.transform = "translate("+0+"px, -"+700+"px)";
+        let sy = 0;
+        let sx = 0;
+        for (let j = 0; j < circle_list.length; j++) {
+            let css = document.getElementById(circle_list[j]);
+            let outer_radius = widthBase;
+            let n = j+2;
+            let e = n - 3;
+            while(e >= 0){
+                outer_radius -= scale;
+                e--;
+            }
+            let inner_radius = outer_radius - scale;
+            //console.log(outer_radius, inner_radius);
+            sy += (outer_radius+inner_radius)/2
+            sx += (scale/2);
+            css.style.transform = "translate("+sx+"px, -"+sy+"px)";
+            // let n = j+2;
+            // let e = n - 2;
+            // let sy = 0;
+            // while(e >= 0){
+            //     sy += heightBase*(scale**e);
+            //     e--;
+            // }
+            // sy *= (1+scale)/2;
+            // let sx = widthBase*(1-(scale**(n-1)))/2.0;
+            // console.log(circle_list[j],sy);
+            // css.style.transform = "translate("+sx+"px, -"+sy+"px)";
+        }
     }
 </script>
 <body onload="loadFunction()">
+    <div id="donut_0" ></div>
+    <div id="donut_1"></div>
+    <div id="donut_2"></div>
+    <div id="donut_3"></div>
+    <div id="donut_4"></div>
     <div id="gradebook_header" class="subheadContent">
         <div class="subheadContent subheadContent--flex-start">
             <div class="assignmentDetails">
