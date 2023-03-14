@@ -787,42 +787,42 @@
             // Add data
             chart.data = [{
                 "Complexity": "CC",
-                "complexity_score":"100",
+                "complexity_score":getComputedStyle(newcircles[0]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[0]).getPropertyValue('--value'),100,50))
             }, {
                 "Complexity": "LOC",
-                "complexity_score":"69",
+                "complexity_score":getComputedStyle(newcircles[1]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[1]).getPropertyValue('--value'),100,50))
             }, {
                 "Complexity": "WMC",
-                "complexity_score":"50",
+                "complexity_score":getComputedStyle(newcircles[2]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[2]).getPropertyValue('--value'),100,50))
             }, {
                 "Complexity": "ABC",
-                "complexity_score":"60",
+                "complexity_score":getComputedStyle(newcircles[3]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[3]).getPropertyValue('--value'),100,50))
             }, {
                 "Coupling": "COF",
-                "coupling_score": "70",
+                "coupling_score": getComputedStyle(newcircles[4]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[4]).getPropertyValue('--value'),100,50))
             }, {
                 "Coupling": "CBO",
-                "coupling_score": "40",
+                "coupling_score": getComputedStyle(newcircles[5]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[5]).getPropertyValue('--value'),100,50))
             }, {
                 "Cohesion": "DIT",
-                "cohesion_score": "50",
+                "cohesion_score": getComputedStyle(newcircles[6]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[6]).getPropertyValue('--value'),100,50))
             }, {
                 "Cohesion": "MHF",
-                "cohesion_score": "40",
+                "cohesion_score": getComputedStyle(newcircles[7]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[7]).getPropertyValue('--value'),100,50))
             }, {
                 "Cohesion": "AHF",
-                "cohesion_score": "40",
+                "cohesion_score": getComputedStyle(newcircles[8]).getPropertyValue('--value'),
                 "color": am4core.color(hslToHex(getComputedStyle(newcircles[8]).getPropertyValue('--value'),100,50))
             }];
-            console.log(hslToHex(getComputedStyle(newcircles[4]).getPropertyValue('--value'),100,50))
+            console.log(getComputedStyle(newcircles[0]).getPropertyValue('--value'))
             //console.log(`hsl(${getComputedStyle(newcircles[0]).getPropertyValue('--value')}, 100%, 50%)`)
             // Add and configure Series
             var pieSeries = chart.series.push(new am4charts.PieSeries());
