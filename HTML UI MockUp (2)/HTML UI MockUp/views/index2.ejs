@@ -5,6 +5,9 @@
     <script data-require="d3@3.5.17" data-semver="3.5.17" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.css" />
     <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 </head>
 <script>
     var base_scores = [];
@@ -761,6 +764,100 @@
             //console.log(score_list[i].innerHTML)
             score_list[i].style.setProperty('background-color', `hsl(${score_list[i].innerHTML}, 100%, 50%)`)
         }
+
+        am4core.ready(function() {
+            am4core.useTheme(am4themes_animated);
+
+            var chart = am4core.create("chartdiv", am4charts.PieChart);
+
+            // Let's cut a hole in our Pie chart the size of 40% the radius
+            chart.innerRadius = am4core.percent(40);
+
+            // Add data
+            chart.data = [{
+                "Complexity": "CC",
+                "complexity_score":"100",
+                "color": am4core.color("#ED1C24")
+            }, {
+                "Complexity": "LOC",
+                "complexity_score":"69"
+            }, {
+                "Complexity": "WMC",
+                "complexity_score":"50"
+
+            }, {
+                "Complexity": "ABC",
+                "complexity_score":"60"
+            }, {
+                "Coupling": "COF",
+                "coupling_score": "70"
+            }, {
+                "Coupling": "CBO",
+                "coupling_score": "40"
+            }, {
+                "Cohesion": "DIT",
+                "cohesion_score": "50"
+            }, {
+                "Cohesion": "MHF",
+                "cohesion_score": "40"
+            }, {
+                "Cohesion": "AHF",
+                "cohesion_score": "40"
+            }];
+
+            // Add and configure Series
+            var pieSeries = chart.series.push(new am4charts.PieSeries());
+            pieSeries.slices.template.propertyFields.fill = "color";
+            pieSeries.dataFields.value = "complexity_score";
+            pieSeries.dataFields.category = "Complexity";
+            pieSeries.slices.template.stroke = am4core.color("#fff");
+            pieSeries.slices.template.strokeWidth = 2;
+            pieSeries.slices.template.strokeOpacity = 1;
+
+            // Disabling labels and ticks on inner circle
+            pieSeries.labels.template.disabled = true;
+            pieSeries.ticks.template.disabled = true;
+
+            // Disable sliding out of slices
+            pieSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries.slices.template.states.getKey("hover").properties.scale = 0.9;
+
+            // Add second series
+            var pieSeries2 = chart.series.push(new am4charts.PieSeries());
+            pieSeries2.dataFields.value = "coupling_score";
+            pieSeries2.dataFields.category = "Coupling";
+            pieSeries2.slices.template.stroke = am4core.color("#fff");
+            pieSeries2.slices.template.strokeWidth = 2;
+            pieSeries2.slices.template.strokeOpacity = 1;
+            pieSeries2.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries2.slices.template.states.getKey("hover").properties.scale = 1.1;
+
+            // Disabling labels and ticks on inner circle
+            pieSeries2.labels.template.disabled = true;
+            pieSeries2.ticks.template.disabled = true;
+
+            // Disable sliding out of slices
+            pieSeries2.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries2.slices.template.states.getKey("hover").properties.scale = 0.9;
+
+            var pieSeries3 = chart.series.push(new am4charts.PieSeries());
+            pieSeries3.dataFields.value = "cohesion_score";
+            pieSeries3.dataFields.category = "Cohesion";
+            pieSeries3.slices.template.stroke = am4core.color("#fff");
+            pieSeries3.slices.template.strokeWidth = 2;
+            pieSeries3.slices.template.strokeOpacity = 1;
+            pieSeries3.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries3.slices.template.states.getKey("hover").properties.scale = 1.1;
+
+            // Disabling labels and ticks on inner circle
+            pieSeries3.labels.template.disabled = true;
+            pieSeries3.ticks.template.disabled = true;
+
+            // Disable sliding out of slices
+            pieSeries3.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries3.slices.template.states.getKey("hover").properties.scale = 0.9;
+
+        }); // end am4core.ready()
     }
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -902,11 +999,6 @@
     }
 </script>
 <body onload="loadFunction()">
-    <div id="donut_0" ></div>
-    <div id="donut_1"></div>
-    <div id="donut_2"></div>
-    <div id="donut_3"></div>
-    <div id="donut_4"></div>
     <div id="gradebook_header" class="subheadContent">
         <div class="subheadContent subheadContent--flex-start">
             <div class="assignmentDetails">
@@ -1146,6 +1238,10 @@
         <button type="button" class="btn cancel ui-button-close" onclick="close_qma_form()">Close Summary</button>
     </div>
     <div id="main-page">
+<!--        <div id="donut_1"></div>-->
+<!--        <div id="donut_2"></div>-->
+<!--        <div id="donut_3"></div>-->
+        <div id="chartdiv"></div>
         <div class="menu">
             <div class="title">THRESHOLDS <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
                     <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
