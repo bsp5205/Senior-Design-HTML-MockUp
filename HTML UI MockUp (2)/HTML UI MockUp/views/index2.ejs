@@ -1,9 +1,6 @@
 <head>
     <title>Title</title>
-    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
-    <link href="/stylesheets/style2.css" rel="stylesheet" type="text/css">
     <script data-require="d3@3.5.17" data-semver="3.5.17" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
-    <link rel="stylesheet" href="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.css" />
     <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
@@ -793,47 +790,65 @@
 
             // Let's cut a hole in our Pie chart the size of 40% the radius
             chart.innerRadius = am4core.percent(40);
-
+            chart.data = [];
             var chart_scale = 0.97;
 
-            // Add data
-            chart.data = [{
-                "Complexity": "CC",
-                "complexity_score":getComputedStyle(newcircles[0]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[0]).getPropertyValue('--value'),100,50))
-            }, {
-                "Complexity": "LOC",
-                "complexity_score":getComputedStyle(newcircles[1]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[1]).getPropertyValue('--value'),100,50))
-            }, {
-                "Complexity": "WMC",
-                "complexity_score":getComputedStyle(newcircles[2]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[2]).getPropertyValue('--value'),100,50))
-            }, {
-                "Complexity": "ABC",
-                "complexity_score":getComputedStyle(newcircles[3]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[3]).getPropertyValue('--value'),100,50))
-            }, {
-                "Coupling": "COF",
-                "coupling_score": getComputedStyle(newcircles[4]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[4]).getPropertyValue('--value'),100,50))
-            }, {
-                "Coupling": "CBO",
-                "coupling_score": getComputedStyle(newcircles[5]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[5]).getPropertyValue('--value'),100,50))
-            }, {
-                "Cohesion": "DIT",
-                "cohesion_score": getComputedStyle(newcircles[6]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[6]).getPropertyValue('--value'),100,50))
-            }, {
-                "Cohesion": "MHF",
-                "cohesion_score": getComputedStyle(newcircles[7]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[7]).getPropertyValue('--value'),100,50))
-            }, {
-                "Cohesion": "AHF",
-                "cohesion_score": getComputedStyle(newcircles[8]).getPropertyValue('--value'),
-                "color": am4core.color(hslToHex(getComputedStyle(newcircles[8]).getPropertyValue('--value'),100,50))
-            }];
+            let complexity = document.getElementsByClassName('complexity');
+            //console.log(complexity);
+            let coupling = document.getElementsByClassName('coupling');
+            //console.log(coupling);
+            let cohesion = document.getElementsByClassName('cohesion');
+            //console.log(cohesion[0].innerHTML);
+            //cohesion = cohesion[0].innerHTML.split(/\r?\n/)[0] +'';
+            //console.log(cohesion);
+            let general = document.getElementsByClassName('general');
+            //console.log(general);
+            let naming = document.getElementsByClassName('naming');
+            //console.log(naming);
+
+            chart.data = [];
+            let counter = 0;
+            for (let i = 0; i < complexity.length; i++) {
+                chart.data.push({
+                    "Complexity":complexity[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "complexity_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
+                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
+                })
+                counter += 1;
+            }
+            for (let i = 0; i < coupling.length; i++) {
+                chart.data.push({
+                    "Coupling":coupling[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "coupling_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
+                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
+                })
+                counter += 1;
+            }
+            for (let i = 0; i < cohesion.length; i++) {
+                chart.data.push({
+                    "Cohesion":cohesion[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "cohesion_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
+                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
+                })
+                counter += 1;
+            }
+            for (let i = 0; i < general.length; i++) {
+                chart.data.push({
+                    "Naming":general[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "naming_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
+                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
+                })
+                counter += 1;
+            }
+            for (let i = 0; i < naming.length; i++) {
+                chart.data.push({
+                    "General":naming[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "general_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
+                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
+                })
+                counter += 1;
+            }
+            console.log(chart.data)
 
             // Add and configure Series
             var pieSeries = chart.series.push(new am4charts.PieSeries());
@@ -878,6 +893,34 @@
             // Disable sliding out of slices
             pieSeries3.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeries3.slices.template.states.getKey("hover").properties.scale = chart_scale;
+
+            var pieSeries4 = chart.series.push(new am4charts.PieSeries());
+            pieSeries4.slices.template.propertyFields.fill = "color";
+            pieSeries4.dataFields.value = "naming_score";
+            pieSeries4.dataFields.category = "Naming";
+            pieSeries4.slices.template.stroke = am4core.color("#fff");
+            pieSeries4.slices.template.strokeWidth = 2;
+            pieSeries4.slices.template.strokeOpacity = 1;
+            // Disabling labels and ticks on inner circle
+            pieSeries4.labels.template.disabled = true;
+            pieSeries4.ticks.template.disabled = true;
+            // Disable sliding out of slices
+            pieSeries4.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries4.slices.template.states.getKey("hover").properties.scale = chart_scale;
+
+            var pieSeries5 = chart.series.push(new am4charts.PieSeries());
+            pieSeries5.slices.template.propertyFields.fill = "color";
+            pieSeries5.dataFields.value = "general_score";
+            pieSeries5.dataFields.category = "General";
+            pieSeries5.slices.template.stroke = am4core.color("#fff");
+            pieSeries5.slices.template.strokeWidth = 2;
+            pieSeries5.slices.template.strokeOpacity = 1;
+            // Disabling labels and ticks on inner circle
+            pieSeries5.labels.template.disabled = true;
+            pieSeries5.ticks.template.disabled = true;
+            // Disable sliding out of slices
+            pieSeries5.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeries5.slices.template.states.getKey("hover").properties.scale = chart_scale;
 
             var chart2 = am4core.create("chartdiv2", am4charts.PieChart);
 
@@ -929,10 +972,1102 @@
             pieSeriesBig3.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeriesBig3.slices.template.states.getKey("hover").properties.scale = chart_scale;
 
+            var pieSeriesBig4 = chart2.series.push(new am4charts.PieSeries());
+            pieSeriesBig4.slices.template.propertyFields.fill = "color";
+            pieSeriesBig4.dataFields.value = "naming_score";
+            pieSeriesBig4.dataFields.category = "Naming";
+            pieSeriesBig4.slices.template.stroke = am4core.color("#fff");
+            pieSeriesBig4.slices.template.strokeWidth = 2;
+            pieSeriesBig4.slices.template.strokeOpacity = 1;
+            // Disabling labels and ticks on inner circle
+            pieSeriesBig4.labels.template.disabled = true;
+            pieSeriesBig4.ticks.template.disabled = true;
+            // Disable sliding out of slices
+            pieSeriesBig4.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeriesBig4.slices.template.states.getKey("hover").properties.scale = chart_scale;
+
+            var pieSeriesBig5 = chart2.series.push(new am4charts.PieSeries());
+            pieSeriesBig5.slices.template.propertyFields.fill = "color";
+            pieSeriesBig5.dataFields.value = "general_score";
+            pieSeriesBig5.dataFields.category = "General";
+            pieSeriesBig5.slices.template.stroke = am4core.color("#fff");
+            pieSeriesBig5.slices.template.strokeWidth = 2;
+            pieSeriesBig5.slices.template.strokeOpacity = 1;
+            // Disabling labels and ticks on inner circle
+            pieSeriesBig5.labels.template.disabled = true;
+            pieSeriesBig5.ticks.template.disabled = true;
+            // Disable sliding out of slices
+            pieSeriesBig5.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+            pieSeriesBig5.slices.template.states.getKey("hover").properties.scale = chart_scale;
+
             chart2.legend = new am4charts.Legend();
         }); // end am4core.ready()
+
     }
+
+
+    function submitForm(id, endpoint) {
+        var form = document.getElementById(id);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', endpoint, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText);
+                const response = JSON.parse(xhr.responseText);
+                const bodyValue = response.bodyValue; // Assuming "bodyValue" is the key in the JSON response
+                document.body.innerHTML = bodyValue;
+            }
+        };
+        xhr.send(JSON.stringify(new FormData(form)));
+    }
+
+    document.getElementById("next_student_form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        submitForm("next_student_form", "/next_student_endpoint");
+    });
+
+    document.getElementById("change_student_form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        submitForm("change_student_form", "/change_student_endpoint");
+    });
+
+    document.getElementById("prev_student_form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        submitForm("prev_student_form", "/prev_student_endpoint");
+    });
+
 </script>
+<style>
+    body {
+        font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    }
+
+    a {
+        color: #00B7FF;
+    }
+
+    p{
+        margin-left: 5%;
+        margin-top: 0;
+    }
+
+    b{
+        font-size: 14px;
+    }
+
+    th{
+        font-size: 16px;
+    }
+
+    #outer-grid {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 4px;
+        padding-top: 1px;
+    }
+    #outer-grid > div {
+        color: black;
+        padding: 2px;
+    }
+    #inner-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 4px;
+    }
+    #inner-grid > div {
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+    }
+    th {
+        text-align: left;
+    }
+    .slider{
+        display: flex;
+    }
+    .slider-value{
+        text-align: center;
+        width: 10%;
+        height: 10%;
+        margin-top: auto;
+        margin-bottom: auto;
+        display: block;
+    }
+    .slidecontainer2 {
+        display: flex;
+    }
+    .slider2 {
+        --SliderColor: hsl(50, 100%, 50%);
+        -webkit-appearance: none;
+        height: 15px;
+        background-color: rgb(200, 200, 200);
+    }
+
+    /* --------------------------- webkit browsers */
+    .slider2::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 15px;
+        height: 15px;
+        background-color: var(--SliderColor);
+        overflow: visible;
+        cursor: pointer;
+    }
+    /* -------------------------- Firefox */
+    .slider2::-moz-range-thumb {
+        -moz-appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 10px;
+        background-color: var(--SliderColor);
+        overflow: visible;
+        cursor: pointer;
+    }
+    .slider2::-moz-focus-outer { border: 0; }
+    /* Remove dotted outline from range input element focused in Firefox */
+
+    #rangeInput {
+        -webkit-appearance: none;
+        height: 5px;
+        background: #d3d3d3;
+        justify-content: center;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 5%;
+    }
+
+    #rangeInput::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background: #5a5a5a;
+        border-radius:50px;
+        cursor: pointer;
+    }
+
+    #itr{
+        margin: auto;
+    }
+
+    input[type='range'][id='itr'] {
+        overflow: hidden;
+        width: auto;
+        -webkit-appearance: none;
+    }
+
+    input[type='range'][id='itr'] ::-webkit-slider-runnable-track {
+        height: 10px;
+        -webkit-appearance: none;
+        color: #13bba4;
+        margin-top: -1px;
+    }
+
+    input[type='range']::-webkit-slider-thumb {
+        width: 1px;
+        -webkit-appearance: none;
+        height: 10px;
+        cursor: ew-resize;
+        box-shadow: -80px 0 0 80px var(--SliderColor);
+    }
+
+    .subheadContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        background: rgba(57,75,88,255);
+        padding: 5px;
+    }
+
+    .subheadContent--flex-start {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+        flex-shrink: 2;
+        min-width: 0;
+        padding-right: 12px;
+        overflow: hidden;
+    }
+
+    .gradebookActions {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .a-style {
+        color: white;
+        text-decoration: none;
+    }
+
+    .assignmentDetails__Info {
+        font-size: 11px;
+        font-size: 0.6875rem;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+        padding: 0;
+        color: white;
+    }
+
+    .assignmentDetails__Title {
+        flex: 1;
+        min-width: 0;
+        font-size: 16px;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+        padding: 0;
+    }
+
+    .subheadContent--flex-end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+        min-width: 0;
+        padding-left: 12px;
+    }
+
+    .statsMetric {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        align-self: flex-end;
+        padding-right: 12px;
+        border-right: 1px dotted var(--ic-brand-global-nav-menu-item__text-color);
+    }
+
+    .studentSelection {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        margin-left: 12px;
+    }
+
+    .statsMetric__Item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        white-space: nowrap;
+        text-align: center;
+        margin-right: 24px;
+        color: white;
+    }
+
+    #gradebook_header #combo_box_container {
+        text-align: left;
+        background: transparent;
+    }
+
+    .navbar {
+        overflow: hidden;
+        background-color: #333;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .navbar a {
+        float: left;
+        font-size: 16px;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    .dropdown {
+        float: left;
+        overflow: hidden;
+    }
+
+    .dropdown .dropbtn {
+        cursor: pointer;
+        border: none;
+        outline: none;
+        color: white;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+    }
+
+
+
+    /* Style the links inside the navigation bar */
+    .topnav a {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    /* Add an active class to highlight the current page */
+    .active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    /* Hide the link that should open and close the topnav on small screens */
+    .topnav .icon {
+        display: none;
+    }
+
+    /* Dropdown container - needed to position the dropdown content */
+    .dropdown {
+        float: left;
+        overflow: hidden;
+    }
+
+
+    /* Style the dropdown content (hidden by default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    /* Style the links inside the dropdown */
+    .dropdown-content button{
+        float: none;
+        color: black;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+
+
+    /* Add a grey background to dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .gradebookMoveToNext {
+        padding: 0 12px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: white;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .clearfix {
+        overflow: auto;
+    }
+
+    .float-right {
+        float: right;
+    }
+
+    .ui-button {
+        background: #f5f5f5;
+        color: #2d3b45;
+        border: 1px solid;
+        border-color: #c7cdd1;
+        border-radius: 3px;
+        transition: background-color .2s ease-in-out;
+        display: inline-block;
+        position: relative;
+        padding: 8px 14px;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-size: 1rem;
+        line-height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        text-decoration: none;
+        overflow: hidden;
+        text-shadow: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .student-selection-class{
+        background-color: #394b58;
+        border: none;
+        color: white
+    }
+
+    .other-student{
+        background-color: white;
+        color: black;
+    }
+    #submitted-file-list{
+    }
+    #submission-history{
+        padding-bottom: 10%;
+    }
+    .submission-file{
+        padding-bottom: 1%;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .secret{
+        display: none;
+    }
+
+    .secret2{
+        display: none;
+    }
+
+    .secret3{
+        display: none;
+    }
+
+    .summary-table table{
+        border: 1px solid #c7cdd1;
+        border-collapse: collapse;
+        table-layout: fixed ;
+        width: 100% ;
+    }
+
+    .summary-table th{
+        border: 1px solid #c7cdd1;
+        border-collapse: collapse;
+    }
+
+    .summary-table td{
+        border: 1px solid #c7cdd1;
+        border-collapse: collapse;
+        width: 25% ;
+    }
+
+    #outer-grid-summary{
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
+        grid-gap: 4px;
+        padding-top: 1px;
+    }
+
+    #outer-grid-summary > div {
+        color: black;
+    }
+
+    #inner-grid-summary{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 4px;
+    }
+
+    #inner-grid-summary > div {
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+    }
+
+    .submission_button{
+        border: none;
+        background: #f5f5f5;
+    }
+    .cma-popup {
+        display: none;
+    }
+    .qma-popup{
+        display: none;
+    }
+    .threshold-popup {
+        display: none;
+    }
+    .next_student_hidden{
+        display: none;
+    }
+    .prev_student_hidden{
+        display: none;
+    }
+    body{
+        padding: 0;
+        margin: 0;
+    }
+    body {
+        margin: 0;
+        font-family: 'Muli', sans-serif;
+    }
+    .menu {
+        font-weight: 100;
+        background: #efefef;
+        width: 50%;
+        height: 100%;
+        top: -0.5%;
+        padding-left: 7.5vh;
+        position: fixed;
+        z-index: 100;
+        -webkit-box-shadow: -3px 0 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: -3px 0 5px 0 rgba(0, 0, 0, 0.2);
+        right: -50%;
+        transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+        color: #222;
+    }
+    .menu:hover, .menu:focus {
+        transform: translate3d(-60%, 0, 0);
+        animation-timing-function: 1s ease-in;
+    }
+    .menu .title {
+        top: 50%;
+        position: absolute;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        transform: rotate(270deg);
+        left: -5%;
+        font-weight: 800;
+        font-size: 15px;
+    }
+
+    .menu .nav {
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        font-weight: 100;
+        max-height:100%;
+        overflow-y: scroll;
+    }
+
+    .menu .nav li {
+        list-style-type: none;
+    }
+    .nav{
+        width: 100%;
+    }
+
+    #outer-grid {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 3fr 2fr 1fr;
+        grid-auto-flow: column;
+        height: 100%;
+        padding: 4px;
+    }
+    #outer-grid > div {
+        background-color: white;
+        color: white;
+        padding: 4px;
+
+    }
+    #inner-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    #inner-grid > div {
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+        color: black;
+    }
+    .no-menu{
+        padding-right: 54px;
+    }
+
+    .next_student_hidden{
+        display: none;
+    }
+    .prev_student_hidden{
+        display: none;
+    }
+
+    .change_file_secret{
+        display: none;
+    }
+
+    .change_student_secret{
+        display: none;
+    }
+
+    .secret3{
+        display: none;
+    }
+
+    .studentSelection {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        margin-left: 12px;
+        margin-right: 20%;
+    }
+
+    .subheadContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        background: rgba(57,75,88,255);
+        padding: 7px;
+    }
+
+    .main-page{
+
+    }
+
+    .subheadContent--flex-start {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+        flex-shrink: 2;
+        min-width: 0;
+        padding-right: 12px;
+        overflow: hidden;
+    }
+
+    .subheadContent--flex-end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+        min-width: 0;
+        padding-left: 12px;
+    }
+
+    .gradebookActions {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .a-style {
+        color: white;
+        text-decoration: none;
+    }
+
+
+    .statsMetric {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        align-self: flex-end;
+        padding-right: 12px;
+        border-right: 1px dotted var(--ic-brand-global-nav-menu-item__text-color);
+    }
+
+    .gradebook_header{
+        z-index: 150;
+        position: relative;
+    }
+
+    .gradebookMoveToNext {
+        padding: 0 12px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: white;
+    }
+
+    .student-selection-class{
+        background-color: #394b58;
+        border: none;
+        color: white;
+    }
+
+    #gradebook_header #combo_box_container {
+        text-align: left;
+        background: transparent;
+    }
+
+    .gradebookActions {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .a-style {
+        color: white;
+        text-decoration: none;
+    }
+
+    .assignmentDetails__Info {
+        font-size: 11px;
+        font-size: 0.6875rem;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+        padding: 0;
+        color: white;
+    }
+
+    .assignmentDetails__Title {
+        flex: 1;
+        min-width: 0;
+        font-size: 16px;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+        padding: 0;
+    }
+
+    .statsMetric {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        align-self: flex-end;
+        padding-right: 12px;
+        border-right: 1px dotted var(--ic-brand-global-nav-menu-item__text-color);
+    }
+
+    .other-student{
+        background-color: white;
+        color: black;
+    }
+
+    form {
+        display: block;
+        margin: 0;
+    }
+
+    .circle {
+
+        background-color: #000;
+        border-radius: 0.8em;
+        -moz-border-radius: 0.8em;
+        -webkit-border-radius: 0.8em;
+        color: Black;
+        display: inline-block;
+        line-height: 1.6em;
+        text-align: center;
+        width: 1.6em;
+        border:1px solid gray;
+        box-shadow: 4px 2px 4px -4px black;
+    }
+
+    .grid-container {
+        display: grid;
+        gap: 0.25%;
+        grid-template-columns: repeat(7,minmax(0,1fr));
+        grid-template-rows: 45vh 45vh;
+        grid-template-areas:
+            'code code code code qma_score qma_score file'
+            'code code code code qma_score qma_score file';
+        background-color: white;
+        padding-right: 3.5%;
+        padding-top: 0.25%;
+        padding-bottom: 0.25%;
+
+    }
+    .item1 {
+        grid-area: code;
+        border: #c7cdd1 solid;
+        overflow: auto;
+        border-radius: 10px;
+    }
+    .item2 {
+        grid-area: qma_score;
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+        overflow: auto;
+        border-radius: 10px;
+        padding-top: 2%;
+        padding-left: 2%;
+    }
+    .item3 {
+        grid-area: cma_score;
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+        overflow: auto;
+        border-radius: 10px;
+    }
+    .item4 {
+        grid-area: file;
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+        border-radius: 10px;
+
+        padding-top: 2%;
+        padding-left: 2%;
+    }
+
+    .item5 {
+        grid-area: file2;
+        background: #f5f5f5;
+        border: #c7cdd1 solid;
+        border-radius: 10px;
+    }
+
+    .center-buttons{
+        text-align:center;
+        justify-content: center;
+    }
+
+    .button-padding{
+        padding: 1%;
+    }
+    .titles{
+        padding-top: 1%;
+        padding-bottom: 5%;
+    }
+
+    .qma-score-table  td{
+        font-size: 14px;
+    }
+
+    .qma-score-table  .table-title{
+        width: 90%;
+        padding-left: 5%;
+    }
+
+    .threshold-table-tab{
+        padding-left: 3%;
+    }
+
+    .qma-score-table{
+        padding-bottom: 5%;
+    }
+
+    .cma-score-table{
+        padding-bottom: 5%;
+    }
+
+    .threshold-table-content{
+        padding-left: 6%;
+    }
+
+    .cma-score-table  td{
+        font-size: 14px;
+    }
+
+    .cma-score-table  .table-title{
+        width: 90%;
+        padding-left: 5%;
+    }
+
+    .threshold-table{
+        width: 70%;
+    }
+    .threshold-table td{
+        padding-bottom: 1%;
+    }
+
+    .progress-bar-cont{
+        text-align: center;
+    }
+
+    .metric-info-popup{
+        font-size: 10px;
+        z-index: 100;
+        position: relative;
+        opacity: 0;
+    }
+
+    .cutoff {
+        text-overflow: ellipsis;
+        /* Required for text-overflow to do anything */
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .table-title p{
+        background: rgba(0, 0, 0, .2);
+        padding: 2px;
+        border-radius: 0.8em;
+    }
+
+    .question:hover + p{
+        opacity: 1;
+    }
+
+    @keyframes growProgressBar {
+        0%, 33% { --pgPercentage: 0; }
+        100% { --pgPercentage: var(--value); }
+    }
+
+    @property --pgPercentage {
+        syntax: '<number>';
+        inherits: false;
+        initial-value: 0;
+    }
+
+    div[role="progressbar"] {
+        --size: 2rem;
+        --fg: #369;
+        --bg: #d9d9d9;
+        --pgPercentage: var(--value);
+        animation: growProgressBar 3s 1 forwards;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background:
+                radial-gradient(closest-side, #f5f5f5 70%, transparent 0 99.9%, white 0),
+                conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0);
+        font-size: calc(var(--size) / 2);
+        font-weight: bold;
+        color: black;
+        box-shadow: 4px 2px 4px -4px black;
+    }
+
+    div[role="progressbar"]::before {
+        counter-reset: percentage var(--value);
+        content: counter(percentage);
+    }
+
+    .grid-title{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .ui-button-close{
+        background: #f5f5f5;
+        color: #2d3b45;
+        border: 1px solid #c7cdd1;
+        border-radius: 3px;
+        transition: background-color .2s ease-in-out;
+        display: inline-block;
+        position: relative;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-size: 1rem;
+        line-height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        text-decoration: none;
+        overflow: hidden;
+        text-shadow: none;
+        -webkit-user-select: none;
+        user-select: none;
+        padding: 1% 3%;
+    }
+
+    .ui-button {
+        background: #f5f5f5;
+        color: #2d3b45;
+        border: 1px solid #c7cdd1;
+        border-radius: 3px;
+        transition: background-color .2s ease-in-out;
+        display: inline-block;
+        position: relative;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-size: 1rem;
+        line-height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        text-decoration: none;
+        overflow: hidden;
+        text-shadow: none;
+        -webkit-user-select: none;
+        user-select: none;
+        margin-top: 5%;
+    }
+
+    .horizontal-center{
+        text-align: center;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #c7cdd1;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #aaafb3;
+    }
+
+    .stacked{
+        display: block;
+        padding: 5% 20%;
+    }
+
+    #submission-history{
+        padding-bottom: 10%;
+    }
+
+    #submission-files{
+        padding-bottom: 200%;
+    }
+
+    .summary-container{
+        margin-left: 0;
+    }
+
+    .pie_chart_button{
+        border: none;
+        background-color: #f5f5f5;
+    }
+
+    .pie_chart_popup{
+        display: none;
+    }
+
+    .summary-table td{
+        border: 1px solid #c7cdd1;
+        border-collapse: collapse;
+        width: 25% ;
+    }
+
+    .summary-table table{
+        border: 1px solid #c7cdd1;
+        border-collapse: collapse;
+        table-layout: fixed ;
+        width: 100% ;
+    }
+
+    .summary-table th{
+        border: 1px solid #c7cdd1;
+        border-collapse: collapse;
+    }
+
+    .cma-popup {
+        display: none;
+    }
+    .qma-popup{
+        display: none;
+    }
+    .threshold-popup {
+        display: none;
+    }
+
+    @keyframes fade-in{0%{opacity:0}100%{opacity:1}}@keyframes fade{10%{transform:scale(1, 1)}35%{transform:scale(1, 1.7)}40%{transform:scale(1, 1.7)}50%{opacity:1}60%{transform:scale(1, 1)}100%{transform:scale(1, 1);opacity:0}}[data-language] code,[class^="lang"] code,pre [data-language],pre [class^="lang"]{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";animation:fade-in 50ms ease-in-out 2s forwards}[data-language] code.rainbow,[class^="lang"] code.rainbow,pre [data-language].rainbow,pre [class^="lang"].rainbow{animation:none;transition:opacity 50ms ease-in-out}[data-language] code.loading,[class^="lang"] code.loading,pre [data-language].loading,pre [class^="lang"].loading{animation:none}[data-language] code.rainbow-show,[class^="lang"] code.rainbow-show,pre [data-language].rainbow-show,pre [class^="lang"].rainbow-show{opacity:1}pre{position:relative}pre.loading .preloader div{animation-play-state:running}pre.loading .preloader div:nth-of-type(1){background:#0081f5;animation:fade 1.5s 300ms linear infinite}pre.loading .preloader div:nth-of-type(2){background:#5000f5;animation:fade 1.5s 438ms linear infinite}pre.loading .preloader div:nth-of-type(3){background:#9000f5;animation:fade 1.5s 577ms linear infinite}pre.loading .preloader div:nth-of-type(4){background:#f50419;animation:fade 1.5s 715ms linear infinite}pre.loading .preloader div:nth-of-type(5){background:#f57900;animation:fade 1.5s 853ms linear infinite}pre.loading .preloader div:nth-of-type(6){background:#f5e600;animation:fade 1.5s 992ms linear infinite}pre.loading .preloader div:nth-of-type(7){background:#00f50c;animation:fade 1.5s 1130ms linear infinite}pre .preloader{position:absolute;top:12px;left:10px}pre .preloader div{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:4px;opacity:0;animation-play-state:paused;animation-fill-mode:forwards}pre{background-color:#000;word-wrap:break-word;margin:0px;padding:10px;color:#fff;font-size:16px;margin-bottom:20px}pre,code{font-family:'Monaco', 'Menlo', courier, monospace}pre{background-color:#f5f5f5;color:#000000}pre .comment{color:#776e71}pre .variable.global,pre .variable.class,pre .variable.instance{color:#ef6155}pre .constant.numeric,pre .constant.language,pre .constant.hex-color,pre .keyword.unit{color:#f99b15}pre .constant,pre .entity,pre .entity.class,pre .support{color:#ff9500}pre .constant.symbol,pre .string{color:#00ff26}pre .entity.function,pre .support.css-property,pre .selector{color:#00bfff}pre .keyword,pre .storage{color:#bb00ff}
+
+</style>
 <body onload="loadFunction()">
     <div id="gradebook_header" class="subheadContent">
         <div class="subheadContent subheadContent--flex-start">
@@ -960,17 +2095,17 @@
             <div class="studentSelection">
                 <form action="http://localhost:3000/next_student" method="post">
                     <label>
-                        <input class="secret3" name="next_student" value="<%=prev_student.studentID%>">
+                        <input class="secret3" name="next_student" id="prev_student" value="<%=prev_student.studentID%>">
                     </label>
                     <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
-                    <label>
-                        <input class="prev_student_hidden" name='prev_student_hidden' value=<%=threshold_list[i]%>>
-                    </label>
+                        <label>
+                            <input class="prev_student_hidden" name='prev_student_hidden' value=<%=threshold_list[i]%>>
+                        </label>
                     <% } %>
                     <% for (let i = 0; i < focus_file.general_scores.length + focus_file.naming_scores.length; i++) { %>
-                    <label>
-                        <input class="prev_student_hidden" name='prev_student_hidden' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
-                    </label>
+                        <label>
+                            <input class="prev_student_hidden" name='prev_student_hidden' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                        </label>
                     <% } %>
                     <button id="prev-student-button" class="Button Button--icon-action gradebookMoveToNext prev" aria-label="Previous" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
@@ -988,36 +2123,41 @@
                             <%}%>
                         <% } %>
                     </select>
+
                     <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
-                    <label>
-                        <input class="change_student_secret" name='test' value=<%=threshold_list[i]%>>
-                    </label>
+                        <label>
+                            <input class="change_student_secret" name='test' value=<%=threshold_list[i]%>>
+                        </label>
                     <% } %>
+
                     <% for (let i = 0; i < focus_file.general_scores.length + focus_file.naming_scores.length; i++) { %>
-                    <label>
-                        <input class="change_student_secret" name='test' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
-                    </label>
+                        <label>
+                            <input class="change_student_secret" name='test' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                        </label>
                     <% } %>
                 </form>
                 <form action="http://localhost:3000/next_student" method="post">
                     <label>
-                        <input class="secret3" name="next_student" value="<%=next_student.studentID%>">
+                        <input class="secret3" name="next_student" id="next_student" value="<%=next_student.studentID%>">
                     </label>
                     <button id="next-student-button" class="Button Button--icon-action gradebookMoveToNext next" aria-label="Next" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
                         </svg>
                     </button>
+
                     <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
-                    <label>
-                        <input class="next_student_hidden" name='next_student_hidden' value=<%=threshold_list[i]%>>
-                    </label>
+                        <label>
+                            <input class="next_student_hidden" name='next_student_hidden' value=<%=threshold_list[i]%>>
+                        </label>
                     <% } %>
+
                     <% for (let i = 0; i < focus_file.general_scores.length + focus_file.naming_scores.length; i++) { %>
-                    <label>
-                        <input class="next_student_hidden" name='next_student_hidden' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
-                    </label>
+                        <label>
+                            <input class="next_student_hidden" name='next_student_hidden' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                        </label>
                     <% } %>
+
                 </form>
             </div>
         </div>
@@ -1049,32 +2189,36 @@
                         </tr>
                         <% for (let i = 0; i < student_list.length; i++) { %>
                             <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
-                            <tr>
-                                <%if(j == 0){%>
-                                    <td>
-                                        <%= student_list[i].name %>
+                                <tr>
+
+                                    <%if(j == 0){%>
+                                        <td>
+                                            <%= student_list[i].name %>
+                                        </td>
+                                        <td>
+                                            <%= student_list[i].studentID %>
+                                        </td>
+                                    <%}else{%>
+                                        <td></td>
+                                        <td></td>
+                                    <%}%>
+
+                                    <td class="cutoff">
+                                        <%= student_list[i].submission.file_list[j].name%>
                                     </td>
-                                    <td>
-                                        <%= student_list[i].studentID %>
-                                    </td>
-                                <%}else{%>
-                                    <td></td>
-                                    <td></td>
-                                <%}%>
-                                <td class="cutoff">
-                                    <%= student_list[i].submission.file_list[j].name%>
-                                </td>
-                                <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
-                                <td class="score">
-                                    <%=student_list[i].submission.file_list[j].general_scores[k]%>
-                                </td>
-                                <% } %>
-                                <% for (let k = 0; k < student_list[i].submission.file_list[j].naming_scores.length; k++) { %>
-                                <td class="score">
-                                    <%=student_list[i].submission.file_list[j].naming_scores[k]%>
-                                </td>
-                                <% } %>
-                            </tr>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
+                                        <td class="score">
+                                            <%=student_list[i].submission.file_list[j].general_scores[k]%>
+                                        </td>
+                                    <% } %>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].naming_scores.length; k++) { %>
+                                        <td class="score">
+                                            <%=student_list[i].submission.file_list[j].naming_scores[k]%>
+                                        </td>
+                                    <% } %>
+                                </tr>
                             <% } %>
                         <% } %>
                     </table>
@@ -1124,37 +2268,40 @@
                         </tr>
                         <% for (let i = 0; i < student_list.length; i++) { %>
                             <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
-                            <tr>
-                                <%if(j == 0){%>
+                                <tr>
+                                    <%if(j == 0){%>
+                                        <td class="cutoff">
+                                            <%= student_list[i].name %>
+                                        </td>
+                                        <td>
+                                            <%= student_list[i].studentID %>
+                                        </td>
+                                    <%}else{%>
+                                        <td></td>
+                                        <td></td>
+                                    <%}%>
                                     <td class="cutoff">
-                                        <%= student_list[i].name %>
+                                        <%= student_list[i].submission.file_list[j].name%>
                                     </td>
-                                    <td>
-                                        <%= student_list[i].studentID %>
-                                    </td>
-                                <%}else{%>
-                                    <td></td>
-                                    <td></td>
-                                <%}%>
-                                <td class="cutoff">
-                                    <%= student_list[i].submission.file_list[j].name%>
-                                </td>
-                                <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
-                                <td class="score">
-                                    <%=student_list[i].submission.file_list[j].complexity_scores[k]%>
-                                </td>
-                                <% } %>
-                                <% for (let k = 0; k < student_list[i].submission.file_list[j].coupling_scores.length; k++) { %>
-                                <td class="score">
-                                    <%=student_list[i].submission.file_list[j].coupling_scores[k]%>
-                                </td>
-                                <% } %>
-                                <% for (let k = 0; k < student_list[i].submission.file_list[j].cohesion_scores.length; k++) { %>
-                                <td class="score">
-                                    <%=student_list[i].submission.file_list[j].cohesion_scores[k]%>
-                                </td>
-                                <% } %>
-                            </tr>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
+                                        <td class="score">
+                                            <%=student_list[i].submission.file_list[j].complexity_scores[k]%>
+                                        </td>
+                                    <% } %>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].coupling_scores.length; k++) { %>
+                                        <td class="score">
+                                            <%=student_list[i].submission.file_list[j].coupling_scores[k]%>
+                                        </td>
+                                    <% } %>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].cohesion_scores.length; k++) { %>
+                                        <td class="score">
+                                            <%=student_list[i].submission.file_list[j].cohesion_scores[k]%>
+                                        </td>
+                                    <% } %>
+                                </tr>
                             <% } %>
                         <% } %>
                     </table>
@@ -1290,19 +2437,19 @@
         </div>
         <div class="grid-container">
             <div class="item1" style="background-color: #f5f5f5">
-                <pre><code data-language="Java"><%=focus_file.code%></code></pre>
+                <pre><code data-language="Java" id="file-code"><%=focus_file.code%></code></pre>
             </div>
             <div class="item2">
                 <div><span class="grid-title">Quality Metric Analysis (QMA)</span></div>
                 <table class="qma-score-table">
                     <tr>
-                        <td>
+                        <td class="metric-title">
                             <b>Complexity</b>
                         </td>
                     </tr>
                     <% for (let i = 0; i < focus_file.complexity_scores.length; i++) { %>
                         <tr>
-                            <td class="table-title"><%= complexity_names[i] %>
+                            <td class="table-title complexity"><%= complexity_names[i] %>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                     <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
@@ -1316,13 +2463,13 @@
                     <% } %>
 
                     <tr>
-                        <td>
+                        <td class="metric-title">
                             <b>Coupling</b>
                         </td>
                     </tr>
                     <% for (let i = 0; i < focus_file.coupling_scores.length; i++) { %>
                         <tr>
-                            <td class="table-title"><%= coupling_names[i] %>
+                            <td class="table-title coupling"><%= coupling_names[i] %>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                     <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
@@ -1336,18 +2483,18 @@
                     <% } %>
 
                     <tr>
-                        <td>
+                        <td class="metric-title">
                             <b>Cohesion</b>
                         </td>
                     </tr>
                     <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
                         <tr>
-                            <td class="table-title"><%= cohesion_names[i] %>
+                            <td class="table-title cohesion"><%= cohesion_names[i] %>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                     <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
                                 </svg>
-                                <p class="metric-info-popup"></p>
+                                <p class="metric-info-popup">hi</p>
                             </td>
                             <td>
                                 <div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:<%= focus_file.cohesion_scores[i]%>" class="color-circle <%='s'+(i+1+focus_file.complexity_scores.length+focus_file.coupling_scores.length)%>"></div>
@@ -1358,13 +2505,13 @@
                 <div><span class="grid-title">Convention Metric Analysis (CMA)</span></div>
                 <table class="cma-score-table">
                     <tr>
-                        <td>
+                        <td class="metric-title">
                             <b>General</b>
                         </td>
                     </tr>
                     <% for (let i = 0; i < general_names.length; i++) { %>
                         <tr>
-                            <td class="table-title"><%= general_names[i] %>
+                            <td class="table-title general"><%= general_names[i] %>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                     <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
@@ -1378,13 +2525,13 @@
                     <% } %>
 
                     <tr>
-                        <td>
+                        <td class="metric-title">
                             <b>Naming</b>
                         </td>
                     </tr>
                     <% for (let i = 0; i < focus_file.naming_scores.length; i++) { %>
                         <tr>
-                            <td class="table-title"><%= naming_names[i] %>
+                            <td class="table-title naming"><%= naming_names[i] %>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle question" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                     <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
@@ -1412,39 +2559,41 @@
                             <label><b>Submitted Files:</b></label>
                             <span>(Click to load)</span>
                             <div id="submitted-file-list">
-                                <% for (let i = 0; i < selected_student.submission.file_list.length; i++) { %>
-                                <div class="submission-file">
-                                    <div class="container">
-                                        <form action="http://localhost:3000/change_file" method="post" id="file_form" class="file_form_test">
-                                            <button class="submission_button" type="submit" name=<%=selected_student.submission.file_list[i].id + '-' +selected_student.studentID%>><%= selected_student.submission.file_list[i].name %></button>
-                                            <label>
-                                                <input class="change_file_secret" name='student_id' value=<%=selected_student.studentID%>>
-                                            </label>
-                                            <label>
-                                                <input class="change_file_secret" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
-                                            </label>
-                                            <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
-                                            <label>
-                                                <input class="<%='s'+(i+1)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i]%>>
-                                            </label>
-                                            <% } %>
+                                <% for (let i = 0; i <     selected_student.submission.file_list.length; i++) { %>
+                                    <div class="submission-file">
+                                        <div class="container">
+                                            <form action="http://localhost:3000/change_file" method="post" id="file_form" class="file_form_test">
+                                                <button class="submission_button" type="submit" name=<%=selected_student.submission.file_list[i].id + '-' +selected_student.studentID%>><%= selected_student.submission.file_list[i].name %></button>
+                                                <label>
+                                                    <input class="change_file_secret" name='student_id' id="student_id" value=<%=selected_student.studentID%>>
+                                                </label>
+                                                <label>
+                                                    <input class="change_file_secret" name='file_id' value=<%=selected_student.submission.file_list[i].id%>>
+                                                </label>
 
-                                            <% for (let i = 0; i < focus_file.naming_scores.length + focus_file.general_scores.length; i++) { %>
-                                            <label>
-                                                <input class="<%='s'+(i+1+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
-                                            </label>
-                                            <% } %>
-                                            <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
-                                            <span class="screenreader-only">
-                                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                                              </svg>
-                                            </span>
-                                            </a>
-                                        </form>
+                                                <% for (let i = 0; i < focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length; i++) { %>
+                                                    <label>
+                                                        <input class="<%='s'+(i+1)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i]%>>
+                                                    </label>
+                                                <% } %>
+
+                                                <% for (let i = 0; i < focus_file.naming_scores.length + focus_file.general_scores.length; i++) { %>
+                                                    <label>
+                                                        <input class="<%='s'+(i+1+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length)%> change_file_secret file_threshold" name='fuck' value=<%=threshold_list[i+focus_file.coupling_scores.length + focus_file.cohesion_scores.length +focus_file.complexity_scores.length]%>>
+                                                    </label>
+                                                <% } %>
+
+                                                <a class="submission-file-download icon-download float-right" href="/courses/2173881/assignments/13793262/submissions/6962095?download=132327340" download="">
+                                                <span class="screenreader-only">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                                  </svg>
+                                                </span>
+                                                </a>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
                                 <% } %>
                             </div>
                         </div>
