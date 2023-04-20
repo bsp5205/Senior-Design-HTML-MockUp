@@ -1,12 +1,12 @@
 <head>
     <title>Title</title>
     <script data-require="d3@3.5.17" data-semver="3.5.17" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
-    <script src="https://rawgit.com/sujeetsr/d3.slider/master/d3.slider.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 </head>
 <script>
+
     var base_scores = [];
 
     function open_cma_form() {
@@ -87,7 +87,7 @@
                     if(circle_list[i].classList.contains(threshold_slider_class_list)) {
                         //console.log('match')
                         let base = base_scores[i];
-                        console.log(base_scores);
+                        //console.log(node.value);
                         let new_circle_value = 0;
                         if(node.value < 50){
                             new_circle_value = base - (node.value - 50)
@@ -780,7 +780,9 @@
         const score_list= document.querySelectorAll('td[class=score]')
         for (let i = 0; i < score_list.length; i++) {
             //console.log(score_list[i].innerHTML)
-            score_list[i].style.setProperty('background-color', `hsl(${score_list[i].innerHTML}, 100%, 50%)`)
+            let temp = Math.round(score_list[i].innerHTML / 10) * 10;
+            console.log(temp)
+            score_list[i].style.setProperty('background-color', `hsl(${temp}, 100%, 50%)`)
         }
 
         am4core.ready(function() {
@@ -794,61 +796,58 @@
             var chart_scale = 0.97;
 
             let complexity = document.getElementsByClassName('complexity');
-            //console.log(complexity);
             let coupling = document.getElementsByClassName('coupling');
-            //console.log(coupling);
             let cohesion = document.getElementsByClassName('cohesion');
-            //console.log(cohesion[0].innerHTML);
-            //cohesion = cohesion[0].innerHTML.split(/\r?\n/)[0] +'';
-            //console.log(cohesion);
             let general = document.getElementsByClassName('general');
-            //console.log(general);
             let naming = document.getElementsByClassName('naming');
-            //console.log(naming);
 
             chart.data = [];
             let counter = 0;
             for (let i = 0; i < complexity.length; i++) {
+                console.log(complexity[i].innerHTML.split(/\r?\n/)[0])
                 chart.data.push({
-                    "Complexity":complexity[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "Complexity":complexity[i].innerHTML.split(/\r?\n/)[0] +'',
                     "complexity_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
                     "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
                 })
                 counter += 1;
             }
             for (let i = 0; i < coupling.length; i++) {
+                console.log(coupling[i].innerHTML.split(/\r?\n/)[0])
                 chart.data.push({
-                    "Coupling":coupling[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "Coupling":coupling[i].innerHTML.split(/\r?\n/)[0] +'',
                     "coupling_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
                     "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
                 })
                 counter += 1;
             }
             for (let i = 0; i < cohesion.length; i++) {
+                console.log(cohesion[i].innerHTML.split(/\r?\n/)[0])
                 chart.data.push({
-                    "Cohesion":cohesion[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "Cohesion":cohesion[i].innerHTML.split(/\r?\n/)[0] +'',
                     "cohesion_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
                     "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
                 })
                 counter += 1;
             }
             for (let i = 0; i < general.length; i++) {
+                console.log(general[i].innerHTML.split(/\r?\n/)[0])
                 chart.data.push({
-                    "Naming":general[0].innerHTML.split(/\r?\n/)[0] +'',
-                    "naming_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
-                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
-                })
-                counter += 1;
-            }
-            for (let i = 0; i < naming.length; i++) {
-                chart.data.push({
-                    "General":naming[0].innerHTML.split(/\r?\n/)[0] +'',
+                    "General":general[i].innerHTML.split(/\r?\n/)[0] +'',
                     "general_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
                     "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
                 })
                 counter += 1;
             }
-            console.log(chart.data)
+            for (let i = 0; i < naming.length; i++) {
+                console.log(naming[i].innerHTML.split(/\r?\n/)[0])
+                chart.data.push({
+                    "Naming":naming[i].innerHTML.split(/\r?\n/)[0] +'',
+                    "naming_score":getComputedStyle(newcircles[counter]).getPropertyValue('--value'),
+                    "color":am4core.color(hslToHex(getComputedStyle(newcircles[counter]).getPropertyValue('--value'),100,50))
+                })
+                counter += 1;
+            }
 
             // Add and configure Series
             var pieSeries = chart.series.push(new am4charts.PieSeries());
@@ -865,6 +864,8 @@
             pieSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeries.slices.template.states.getKey("hover").properties.scale = chart_scale;
 
+            pieSeries.slices.template.states.getKey("hover").properties.scale = 1;
+            pieSeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
             // Add second series
             var pieSeries2 = chart.series.push(new am4charts.PieSeries());
             pieSeries2.slices.template.propertyFields.fill = "color";
@@ -879,6 +880,8 @@
             // Disable sliding out of slices
             pieSeries2.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeries2.slices.template.states.getKey("hover").properties.scale = chart_scale;
+            pieSeries2.slices.template.states.getKey("hover").properties.scale = 1;
+            pieSeries2.slices.template.states.getKey("active").properties.shiftRadius = 0;
 
             var pieSeries3 = chart.series.push(new am4charts.PieSeries());
             pieSeries3.slices.template.propertyFields.fill = "color";
@@ -893,6 +896,8 @@
             // Disable sliding out of slices
             pieSeries3.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeries3.slices.template.states.getKey("hover").properties.scale = chart_scale;
+            pieSeries3.slices.template.states.getKey("hover").properties.scale = 1;
+            pieSeries3.slices.template.states.getKey("active").properties.shiftRadius = 0;
 
             var pieSeries4 = chart.series.push(new am4charts.PieSeries());
             pieSeries4.slices.template.propertyFields.fill = "color";
@@ -907,6 +912,8 @@
             // Disable sliding out of slices
             pieSeries4.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeries4.slices.template.states.getKey("hover").properties.scale = chart_scale;
+            pieSeries4.slices.template.states.getKey("hover").properties.scale = 1;
+            pieSeries4.slices.template.states.getKey("active").properties.shiftRadius = 0;
 
             var pieSeries5 = chart.series.push(new am4charts.PieSeries());
             pieSeries5.slices.template.propertyFields.fill = "color";
@@ -921,6 +928,8 @@
             // Disable sliding out of slices
             pieSeries5.slices.template.states.getKey("hover").properties.shiftRadius = 0;
             pieSeries5.slices.template.states.getKey("hover").properties.scale = chart_scale;
+            pieSeries5.slices.template.states.getKey("hover").properties.scale = 1;
+            pieSeries5.slices.template.states.getKey("active").properties.shiftRadius = 0;
 
             var chart2 = am4core.create("chartdiv2", am4charts.PieChart);
 
@@ -1001,7 +1010,52 @@
             pieSeriesBig5.slices.template.states.getKey("hover").properties.scale = chart_scale;
 
             chart2.legend = new am4charts.Legend();
+            chart2.legend.position = 'left'
+            chart2.legend.maxWidth = 2000
+            chart2.legend.scrollable = true;
         }); // end am4core.ready()
+
+    }
+
+    function showQMAPopup() {
+
+        document.getElementById('blackOverlay').style.display = 'block';
+        document.getElementById('qma_popup').style.display = 'block';
+
+    }
+
+    function closeQMAPopup() {
+
+        document.getElementById('blackOverlay').style.display = 'none';
+        document.getElementById('qma_popup').style.display = 'none';
+
+    }
+
+    function showCMAPopup() {
+
+        document.getElementById('blackOverlay').style.display = 'block';
+        document.getElementById('cma_popup').style.display = 'block';
+
+    }
+
+    function closeCMAPopup() {
+
+        document.getElementById('blackOverlay').style.display = 'none';
+        document.getElementById('cma_popup').style.display = 'none';
+
+    }
+
+    function showPiePopup() {
+
+        document.getElementById('blackOverlay').style.display = 'block';
+        document.getElementById('pie_popup').style.display = 'block';
+
+    }
+
+    function closePiePopup() {
+
+        document.getElementById('blackOverlay').style.display = 'none';
+        document.getElementById('pie_popup').style.display = 'none';
 
     }
 
@@ -1015,32 +1069,21 @@
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log(xhr.responseText);
                 const response = JSON.parse(xhr.responseText);
-                const bodyValue = response.bodyValue; // Assuming "bodyValue" is the key in the JSON response
-                document.body.innerHTML = bodyValue;
+                // Assuming "bodyValue" is the key in the JSON response
+                document.body.innerHTML = response.bodyValue;
             }
         };
         xhr.send(JSON.stringify(new FormData(form)));
     }
-
-    document.getElementById("next_student_form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitForm("next_student_form", "/next_student_endpoint");
-    });
-
-    document.getElementById("change_student_form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitForm("change_student_form", "/change_student_endpoint");
-    });
-
-    document.getElementById("prev_student_form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitForm("prev_student_form", "/prev_student_endpoint");
-    });
-
 </script>
 <style>
     body {
         font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    }
+
+    #chartdiv2{
+        background-color: #f5f5f5;
+        height: 90%;
     }
 
     a {
@@ -1386,6 +1429,7 @@
     .ui-button {
         background: #f5f5f5;
         color: #2d3b45;
+        width: 100%;
         border: 1px solid;
         border-color: #c7cdd1;
         border-radius: 3px;
@@ -1463,7 +1507,7 @@
         grid-template-rows: 1fr 1fr;
         grid-template-columns: 1fr;
         grid-gap: 4px;
-        padding-top: 1px;
+        min-height: 100%
     }
 
     #outer-grid-summary > div {
@@ -1484,12 +1528,6 @@
     .submission_button{
         border: none;
         background: #f5f5f5;
-    }
-    .cma-popup {
-        display: none;
-    }
-    .qma-popup{
-        display: none;
     }
     .threshold-popup {
         display: none;
@@ -1514,7 +1552,7 @@
         width: 50%;
         height: 100%;
         top: -0.5%;
-        padding-left: 7.5vh;
+        padding-left: 3%;
         position: fixed;
         z-index: 100;
         -webkit-box-shadow: -3px 0 5px 0 rgba(0, 0, 0, 0.2);
@@ -1549,6 +1587,7 @@
         font-weight: 100;
         max-height:100%;
         overflow-y: scroll;
+        padding-left: 0;
     }
 
     .menu .nav li {
@@ -1805,9 +1844,9 @@
         background: #f5f5f5;
         border: #c7cdd1 solid;
         border-radius: 10px;
-
         padding-top: 2%;
         padding-left: 2%;
+        padding-right: 2%;
     }
 
     .item5 {
@@ -1853,6 +1892,7 @@
 
     .threshold-table-content{
         padding-left: 6%;
+        width: 40%;
     }
 
     .cma-score-table  td{
@@ -1942,15 +1982,11 @@
     .ui-button-close{
         background: #f5f5f5;
         color: #2d3b45;
-        border: 1px solid #c7cdd1;
-        border-radius: 3px;
+        border: 3px #c7cdd1 solid;
         transition: background-color .2s ease-in-out;
         display: inline-block;
         position: relative;
-        margin-bottom: 0;
-        font-size: 16px;
-        font-size: 1rem;
-        line-height: 20px;
+        font-size: 14px;
         text-align: center;
         vertical-align: middle;
         cursor: pointer;
@@ -1959,7 +1995,6 @@
         text-shadow: none;
         -webkit-user-select: none;
         user-select: none;
-        padding: 1% 3%;
     }
 
     .ui-button {
@@ -2013,7 +2048,6 @@
 
     .stacked{
         display: block;
-        padding: 5% 20%;
     }
 
     #submission-history{
@@ -2021,7 +2055,7 @@
     }
 
     #submission-files{
-        padding-bottom: 200%;
+        height: 75%;
     }
 
     .summary-container{
@@ -2031,10 +2065,28 @@
     .pie_chart_button{
         border: none;
         background-color: #f5f5f5;
+        height: 100%;
+        width: 100%;
     }
 
     .pie_chart_popup{
         display: none;
+    }
+
+    .center-pie-title{
+        justify-content: center;
+        display: flex;
+        background-color: #f5f5f5;
+        height: 10%;
+    }
+
+
+    .overlap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
     }
 
     .summary-table td{
@@ -2055,20 +2107,238 @@
         border-collapse: collapse;
     }
 
-    .cma-popup {
-        display: none;
-    }
-    .qma-popup{
-        display: none;
-    }
     .threshold-popup {
         display: none;
     }
+
+    .blackOverlay {
+        display:none;
+        background:rgba(0,0,0,.6);
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index:200;
+    }
+
+    .popup {
+        display:none;
+        background:#fff;
+        position:fixed;
+        top:10%;
+        left:50%;
+        width:80%;
+        height:80%;
+        margin-left:-40%;
+        z-index:300;
+        border:2px solid #000;
+    }
+
+    .closePopup {
+        position: absolute;
+        right:0;
+        float:right;
+        font-weight:bold;
+        color:red;
+        cursor:pointer;
+    }
+
+
 
     @keyframes fade-in{0%{opacity:0}100%{opacity:1}}@keyframes fade{10%{transform:scale(1, 1)}35%{transform:scale(1, 1.7)}40%{transform:scale(1, 1.7)}50%{opacity:1}60%{transform:scale(1, 1)}100%{transform:scale(1, 1);opacity:0}}[data-language] code,[class^="lang"] code,pre [data-language],pre [class^="lang"]{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";animation:fade-in 50ms ease-in-out 2s forwards}[data-language] code.rainbow,[class^="lang"] code.rainbow,pre [data-language].rainbow,pre [class^="lang"].rainbow{animation:none;transition:opacity 50ms ease-in-out}[data-language] code.loading,[class^="lang"] code.loading,pre [data-language].loading,pre [class^="lang"].loading{animation:none}[data-language] code.rainbow-show,[class^="lang"] code.rainbow-show,pre [data-language].rainbow-show,pre [class^="lang"].rainbow-show{opacity:1}pre{position:relative}pre.loading .preloader div{animation-play-state:running}pre.loading .preloader div:nth-of-type(1){background:#0081f5;animation:fade 1.5s 300ms linear infinite}pre.loading .preloader div:nth-of-type(2){background:#5000f5;animation:fade 1.5s 438ms linear infinite}pre.loading .preloader div:nth-of-type(3){background:#9000f5;animation:fade 1.5s 577ms linear infinite}pre.loading .preloader div:nth-of-type(4){background:#f50419;animation:fade 1.5s 715ms linear infinite}pre.loading .preloader div:nth-of-type(5){background:#f57900;animation:fade 1.5s 853ms linear infinite}pre.loading .preloader div:nth-of-type(6){background:#f5e600;animation:fade 1.5s 992ms linear infinite}pre.loading .preloader div:nth-of-type(7){background:#00f50c;animation:fade 1.5s 1130ms linear infinite}pre .preloader{position:absolute;top:12px;left:10px}pre .preloader div{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:4px;opacity:0;animation-play-state:paused;animation-fill-mode:forwards}pre{background-color:#000;word-wrap:break-word;margin:0px;padding:10px;color:#fff;font-size:16px;margin-bottom:20px}pre,code{font-family:'Monaco', 'Menlo', courier, monospace}pre{background-color:#f5f5f5;color:#000000}pre .comment{color:#776e71}pre .variable.global,pre .variable.class,pre .variable.instance{color:#ef6155}pre .constant.numeric,pre .constant.language,pre .constant.hex-color,pre .keyword.unit{color:#f99b15}pre .constant,pre .entity,pre .entity.class,pre .support{color:#ff9500}pre .constant.symbol,pre .string{color:#00ff26}pre .entity.function,pre .support.css-property,pre .selector{color:#00bfff}pre .keyword,pre .storage{color:#bb00ff}
 
 </style>
 <body onload="loadFunction()">
+    <div id="blackOverlay" class="blackOverlay"></div>
+    <div id="qma_popup" class="popup">
+<!--        <span class="closePopup" onclick="closeQMAPopup()">X</span>-->
+        <button type="button" class="closePopup ui-button-close" onclick="closeQMAPopup()">X</button>
+        <div class="qma-popup" id="qma_form">
+            <div id="outer-grid-summary">
+                <div id="inner-grid-summary">
+                    <div class="summary-table">
+                        <table>
+                            <tr>
+                                <th colspan="12">Quality Metric Analysis Report</th>
+                            </tr>
+
+                            <tr>
+                                <th colspan="3"></th>
+                                <th colspan="4">Complexity</th>
+                                <th colspan="2">Coupling</th>
+                                <th colspan="3">Cohesion</th>
+                            </tr>
+
+                            <tr>
+                                <td>Student Name</td>
+                                <td>Student ID</td>
+                                <td>File</td>
+                                <td>Cyclomatic Complexity (CC)</td>
+                                <td>Lines of Code (LOC)</td>
+                                <td>Weighted Methods per Class (WMC)</td>
+                                <td>ABC</td>
+                                <td>Coupling Factor (COF)</td>
+                                <td>Coupling between objects (CBO)</td>
+                                <td>Depth of Inheritance (DIT)</td>
+                                <td>Method Hiding Factor (MHF)</td>
+                                <td>Attribute Hiding Factor (AHF)</td>
+                            </tr>
+                            <% for (let i = 0; i < student_list.length; i++) { %>
+                                <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
+                                <tr>
+                                    <%if(j == 0){%>
+                                        <td class="cutoff">
+                                            <%= student_list[i].name %>
+                                        </td>
+                                        <td>
+                                            <%= student_list[i].studentID %>
+                                        </td>
+                                    <%}else{%>
+                                        <td></td>
+                                        <td></td>
+                                    <%}%>
+                                    <td class="cutoff">
+                                        <%= student_list[i].submission.file_list[j].name%>
+                                    </td>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
+                                    <td class="score">
+                                        <%=student_list[i].submission.file_list[j].complexity_scores[k]%>
+                                    </td>
+                                    <% } %>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].coupling_scores.length; k++) { %>
+                                    <td class="score">
+                                        <%=student_list[i].submission.file_list[j].coupling_scores[k]%>
+                                    </td>
+                                    <% } %>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].cohesion_scores.length; k++) { %>
+                                    <td class="score">
+                                        <%=student_list[i].submission.file_list[j].cohesion_scores[k]%>
+                                    </td>
+                                    <% } %>
+                                </tr>
+                                <% } %>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+                <div id="inner-grid-summary">
+                    <div>
+                        <table>
+                            <tr>
+                                <th colspan="2">QMA Summary Observations</th>
+                            </tr>
+                            <tr>
+                                <td>Example observation 1</td>
+                            </tr>
+                            <tr>
+                                <td>Example observation 2</td>
+                            </tr>
+                            <tr>
+                                <td>Example observation 3</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="cma_popup" class="popup">
+        <button type="button" class="closePopup ui-button-close" onclick="closeCMAPopup()">X</button>
+        <div class="cma-popup" id="cma_form">
+            <div id="outer-grid-summary">
+                <div id="inner-grid-summary">
+                    <div class="summary-table">
+                        <table>
+                            <tr>
+                                <th colspan="8">Convention Metric Analysis Report</th>
+                            </tr>
+
+                            <tr>
+                                <th colspan="3"></th>
+                                <th colspan="2">General</th>
+                                <th colspan="3">Naming Conventions</th>
+                            </tr>
+
+                            <tr>
+                                <td>Student Name</td>
+                                <td>Student ID</td>
+                                <td>File</td>
+                                <td>Comment Percentage (CP)</td>
+                                <td>Token Count (TC)</td>
+                                <td>Class</td>
+                                <td>Method</td>
+                                <td>Variable</td>
+                            </tr>
+                            <% for (let i = 0; i < student_list.length; i++) { %>
+                                <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
+                                <tr>
+
+                                    <%if(j == 0){%>
+                                        <td>
+                                            <%= student_list[i].name %>
+                                        </td>
+                                        <td>
+                                            <%= student_list[i].studentID %>
+                                        </td>
+                                    <%}else{%>
+                                        <td></td>
+                                        <td></td>
+                                    <%}%>
+
+                                    <td class="cutoff">
+                                        <%= student_list[i].submission.file_list[j].name%>
+                                    </td>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
+                                    <td class="score">
+                                        <%=student_list[i].submission.file_list[j].general_scores[k]%>
+                                    </td>
+                                    <% } %>
+
+                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].naming_scores.length; k++) { %>
+                                    <td class="score">
+                                        <%=student_list[i].submission.file_list[j].naming_scores[k]%>
+                                    </td>
+                                    <% } %>
+                                </tr>
+                                <% } %>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+                <div id="inner-grid-summary">
+                    <div>
+                        <table>
+                            <tr>
+                                <th colspan="2">CMA Summary Observations</th>
+                            </tr>
+                            <tr>
+                                <td>Example observation 1</td>
+                            </tr>
+                            <tr>
+                                <td>Example observation 2</td>
+                            </tr>
+                            <tr>
+                                <td>Example observation 3</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pie_popup" class="popup">
+        <button class="pie_chart_button" onclick="closePiePopup()">
+            <div class="center-pie-title">
+                <h1>Metric Analysis (Click to Close)</h1>
+            </div>
+            <div id="chartdiv2"></div>
+        </button>
+    </div>
     <div id="gradebook_header" class="subheadContent">
         <div class="subheadContent subheadContent--flex-start">
             <div class="assignmentDetails">
@@ -2093,7 +2363,7 @@
                 </div>
             </div>
             <div class="studentSelection">
-                <form action="http://localhost:3000/next_student" method="post">
+                <form action="http://localhost:3000/next_student" method="post" id="next_student_form">
                     <label>
                         <input class="secret3" name="next_student" id="prev_student" value="<%=prev_student.studentID%>">
                     </label>
@@ -2113,7 +2383,7 @@
                         </svg>
                     </button>
                 </form>
-                <form action="http://localhost:3000/change_student" method="post">
+                <form action="http://localhost:3000/change_student" method="post" id="change_student_form">
                     <select name="student_list" id="student-list" class="student-selection-class" onchange="this.form.submit()">
                         <% for (let i = 0; i < student_list.length; i++) { %>
                             <% if(selected_student == student_list[i]){%>
@@ -2136,7 +2406,7 @@
                         </label>
                     <% } %>
                 </form>
-                <form action="http://localhost:3000/next_student" method="post">
+                <form action="http://localhost:3000/next_student" method="post" id="prev_student_form">
                     <label>
                         <input class="secret3" name="next_student" id="next_student" value="<%=next_student.studentID%>">
                     </label>
@@ -2161,168 +2431,6 @@
                 </form>
             </div>
         </div>
-    </div>
-    <div class="cma-popup" id="cma_form">
-        <div id="outer-grid-summary">
-            <div id="inner-grid-summary">
-                <div class="summary-table">
-                    <table>
-                        <tr>
-                            <th colspan="12">CMA Metric Analysis Report</th>
-                        </tr>
-
-                        <tr>
-                            <th colspan="3"></th>
-                            <th colspan="2">General</th>
-                            <th colspan="3">Naming Conventions</th>
-                        </tr>
-
-                        <tr>
-                            <td>Student Name</td>
-                            <td>Student ID</td>
-                            <td>File</td>
-                            <td>Comment Percentage (CP)</td>
-                            <td>Token Count (TC)</td>
-                            <td>Class</td>
-                            <td>Method</td>
-                            <td>Variable</td>
-                        </tr>
-                        <% for (let i = 0; i < student_list.length; i++) { %>
-                            <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
-                                <tr>
-
-                                    <%if(j == 0){%>
-                                        <td>
-                                            <%= student_list[i].name %>
-                                        </td>
-                                        <td>
-                                            <%= student_list[i].studentID %>
-                                        </td>
-                                    <%}else{%>
-                                        <td></td>
-                                        <td></td>
-                                    <%}%>
-
-                                    <td class="cutoff">
-                                        <%= student_list[i].submission.file_list[j].name%>
-                                    </td>
-
-                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].general_scores.length; k++) { %>
-                                        <td class="score">
-                                            <%=student_list[i].submission.file_list[j].general_scores[k]%>
-                                        </td>
-                                    <% } %>
-
-                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].naming_scores.length; k++) { %>
-                                        <td class="score">
-                                            <%=student_list[i].submission.file_list[j].naming_scores[k]%>
-                                        </td>
-                                    <% } %>
-                                </tr>
-                            <% } %>
-                        <% } %>
-                    </table>
-                </div>
-            </div>
-            <div id="inner-grid-summary">
-                <div>
-                    <table>
-                        <tr>
-                            <th colspan="2">CMA Summary Observations</th>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <button type="button" class="btn cancel ui-button-close" onclick="close_cma_form()">Close Summary</button>
-    </div>
-    <div class="qma-popup" id="qma_form">
-        <div id="outer-grid-summary">
-            <div id="inner-grid-summary">
-                <div class="summary-table">
-                    <table>
-                        <tr>
-                            <th colspan="12">QMA Metric Analysis Report</th>
-                        </tr>
-
-                        <tr>
-                            <th colspan="3"></th>
-                            <th colspan="4">Complexity</th>
-                            <th colspan="2">Coupling</th>
-                            <th colspan="3">Cohesion</th>
-                        </tr>
-
-                        <tr>
-                            <td>Student Name</td>
-                            <td>Student ID</td>
-                            <td>File</td>
-                            <td>Cyclomatic Complexity (CC)</td>
-                            <td>Lines of Code (LOC)</td>
-                            <td>Weighted Methods per Class (WMC)</td>
-                            <td>ABC</td>
-                            <td>Coupling Factor (COF)</td>
-                            <td>Coupling between objects (CBO)</td>
-                            <td>Depth of Inheritance (DIT)</td>
-                            <td>Method Hiding Factor (MHF)</td>
-                            <td>Attribute Hiding Factor (AHF)</td>
-                        </tr>
-                        <% for (let i = 0; i < student_list.length; i++) { %>
-                            <% for (let j = 0; j < student_list[i].submission.file_list.length; j++) { %>
-                                <tr>
-                                    <%if(j == 0){%>
-                                        <td class="cutoff">
-                                            <%= student_list[i].name %>
-                                        </td>
-                                        <td>
-                                            <%= student_list[i].studentID %>
-                                        </td>
-                                    <%}else{%>
-                                        <td></td>
-                                        <td></td>
-                                    <%}%>
-                                    <td class="cutoff">
-                                        <%= student_list[i].submission.file_list[j].name%>
-                                    </td>
-
-                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].complexity_scores.length; k++) { %>
-                                        <td class="score">
-                                            <%=student_list[i].submission.file_list[j].complexity_scores[k]%>
-                                        </td>
-                                    <% } %>
-
-                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].coupling_scores.length; k++) { %>
-                                        <td class="score">
-                                            <%=student_list[i].submission.file_list[j].coupling_scores[k]%>
-                                        </td>
-                                    <% } %>
-
-                                    <% for (let k = 0; k < student_list[i].submission.file_list[j].cohesion_scores.length; k++) { %>
-                                        <td class="score">
-                                            <%=student_list[i].submission.file_list[j].cohesion_scores[k]%>
-                                        </td>
-                                    <% } %>
-                                </tr>
-                            <% } %>
-                        <% } %>
-                    </table>
-                </div>
-            </div>
-            <div id="inner-grid-summary">
-                <div>
-                    <table>
-                        <tr>
-                            <th colspan="2">QMA Summary Observations</th>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <button type="button" class="btn cancel ui-button-close" onclick="close_qma_form()">Close Summary</button>
-    </div>
-    <div class="pie_chart_popup"  id="pie_chart_form">
-        <button class="pie_chart_button" onclick="close_pie_chart()" style="width: 100%; height: 100%;">
-            <div id="chartdiv2"></div>
-        </button>
     </div>
     <div id="main-page">
         <div class="menu">
@@ -2359,7 +2467,7 @@
                         </tr>
                         <% for (let i = 0; i < focus_file.coupling_scores.length; i++) { %>
                             <tr>
-                                <td class="threshold-table-content" style="width: 40%;">
+                                <td class="threshold-table-content">
                                     <%= coupling_names[i] %>
                                 </td>
                                 <td>
@@ -2378,7 +2486,7 @@
                         </tr>
                         <% for (let i = 0; i < focus_file.cohesion_scores.length; i++) { %>
                             <tr>
-                                <td class="threshold-table-content" style="width: 40%;">
+                                <td class="threshold-table-content">
                                     <%= cohesion_names[i] %>
                                 </td>
                                 <td>
@@ -2402,7 +2510,7 @@
                         </tr>
                         <% for (let i = 0; i < focus_file.general_scores.length; i++) { %>
                             <tr>
-                                <td class="threshold-table-content" style="width: 40%;">
+                                <td class="threshold-table-content">
                                     <%= general_names[i] %>
                                 </td>
                                 <td>
@@ -2420,7 +2528,7 @@
                         </tr>
                         <% for (let i = 0; i < focus_file.naming_scores.length; i++) { %>
                             <tr>
-                                <td class="threshold-table-content" style="width: 40%;">
+                                <td class="threshold-table-content">
                                     <%= naming_names[i] %>
                                 </td>
                                 <td>
@@ -2544,9 +2652,10 @@
                         </tr>
                     <% } %>
                 </table>
-                <button onclick="open_pie_chart()" style="width: 90%; height: 40%; margin-left: 5%" class="pie_chart_button">
+                <div><span class="grid-title">Metric Analysis (Click to Expand)</span></div>
+                <button onclick="showPiePopup()" style="width: 90%; height: 40%; margin-left: 5%" class="pie_chart_button">
                     <div id="chartdiv"></div>
-                </button>
+                </button>`
             </div>
             <div class="item4">
                 <div>
@@ -2597,14 +2706,32 @@
                                 <% } %>
                             </div>
                         </div>
-
                     </div>
                     <div class="summary-container">
-                        <button class="ui-button stacked" onclick="open_qma_form()">QMA Summary</button>
-                        <button class="ui-button stacked" onclick="open_cma_form()">CMA Summary</button>
+                        <button class="ui-button stacked" onclick="showQMAPopup()">QMA Summary</button>
+                        <button class="ui-button stacked" onclick="showCMAPopup()">CMA Summary</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+<script>
+    window.addEventListener("DOMContentLoaded", (event) => {
+        document.getElementById("next_student_form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            submitForm("next_student_form", "/next_student_endpoint");
+        });
+
+        document.getElementById("change_student_form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            submitForm("change_student_form", "/change_student_endpoint");
+        });
+
+        document.getElementById("prev_student_form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            submitForm("prev_student_form", "/prev_student_endpoint");
+        });
+
+    });
+</script>
